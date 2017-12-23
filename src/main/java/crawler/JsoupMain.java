@@ -1,3 +1,5 @@
+package crawler;
+
 import com.univocity.parsers.tsv.TsvWriter;
 import com.univocity.parsers.tsv.TsvWriterSettings;
 import org.jsoup.Connection;

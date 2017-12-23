@@ -1,3 +1,5 @@
+package crawler;
+
 import com.univocity.parsers.annotations.NullString;
 
 import java.util.List;
