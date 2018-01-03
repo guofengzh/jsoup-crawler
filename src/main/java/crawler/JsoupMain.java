@@ -1,5 +1,6 @@
 package crawler;
 
+import com.google.common.base.Joiner;
 import com.univocity.parsers.tsv.TsvWriter;
 import com.univocity.parsers.tsv.TsvWriterSettings;
 import org.jsoup.Connection;
@@ -20,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 public class JsoupMain {
-    public static int totalPage = 1000 ;
+    public static int totalPage = 5 ;
     public static void main(String[] args) throws IOException {
         int i ;
         List<Product> allProducts = new ArrayList<>() ;
@@ -76,9 +77,11 @@ public class JsoupMain {
         Product product = processProductMainLink(productMainLink) ;
         Element sizesElement = element.getElementsByClass("sizes").first() ;
         List<String> sizes = getSizes(sizesElement) ;
+        List<String> noStockSizes = getNoStockSizes(sizesElement) ;
         String productUrl = product.getProductUrl() ;
         product.setCode(productUrl.substring(productUrl.lastIndexOf("-") + 1));
         product.setSizes(sizes);
+        product.setNoStock(noStockSizes);
         return product ;
     }
 
@@ -93,17 +96,28 @@ public class JsoupMain {
         return product ;
     }
 
+    public static List<String> getNoStockSizes(Element element) {
+        Elements liElements = element.getElementsByTag("li") ;
+        List<String> sizes = new ArrayList<>() ;
+        for ( Element oneElement : liElements ) {
+            String noStock = oneElement.attr("class"); // "noStock"
+            Element anchorElement = oneElement.getElementsByTag("a").first() ;
+            String sizeText = anchorElement.text() ;
+            if ( noStock != null && !noStock.isEmpty())
+                sizes.add(sizeText) ;
+        }
+        return sizes ;
+    }
+
     public static List<String> getSizes(Element element) {
         Elements liElements = element.getElementsByTag("li") ;
         List<String> sizes = new ArrayList<>() ;
         for ( Element oneElement : liElements ) {
             String noStock = oneElement.attr("class"); // "noStock"
             Element anchorElement = oneElement.getElementsByTag("a").first() ;
-            String href = anchorElement.attr("href") ;
             String sizeText = anchorElement.text() ;
-            if ( noStock != null && !noStock.isEmpty())
-                sizeText = sizeText + "(" + noStock + ")";
-            sizes.add(sizeText) ;
+            if ( noStock == null  || noStock.isEmpty())
+                sizes.add(sizeText) ;
         }
         return sizes ;
     }
@@ -117,15 +131,26 @@ public class JsoupMain {
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8"))
         {
             TsvWriter writer = new TsvWriter(outputStreamWriter, new TsvWriterSettings()) ;
-            writer.writeHeaders("code", "title", "details", "price", "sizes", "product_url", "slug");
+            writer.writeHeaders(Product.header);
             for(Product product : products) {
                 writer.addValue(product.getCode());
                 writer.addValue(product.getTitle());
                 writer.addValue(product.getLister__item__details());
                 writer.addValue(product.getLister__item__price());
-                writer.addValue(product.getSizes());
+                writer.addValue(Joiner.on(",")
+                        .skipNulls()
+                        .join(product.getSizes()));
+                writer.addValue(Joiner.on(",")
+                        .skipNulls()
+                        .join(product.getNoStock()));
                 writer.addValue(product.getProductUrl());
                 writer.addValue(product.getLister__item__slug());
+                writer.addValue(product.getOn_shelf());
+                writer.addValue(product.getOff_shelf());
+                writer.addValue(product.getNew_product());
+                writer.addValue(product.getSale_off());
+                writer.addValue(product.getShort_in_size());
+                writer.addValue(product.getComplement());
                 //flushes all values to the output, creating a row.
                 writer.writeValuesToRow();
             }
