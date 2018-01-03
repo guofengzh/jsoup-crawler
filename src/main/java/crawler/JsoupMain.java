@@ -1,6 +1,8 @@
 package crawler;
 
 import com.google.common.base.Joiner;
+import com.univocity.parsers.csv.CsvParser;
+import com.univocity.parsers.csv.CsvParserSettings;
 import com.univocity.parsers.tsv.TsvWriter;
 import com.univocity.parsers.tsv.TsvWriterSettings;
 import org.jsoup.Connection;
@@ -9,16 +11,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class JsoupMain {
     public static int totalPage = 5 ;
@@ -120,6 +116,37 @@ public class JsoupMain {
                 sizes.add(sizeText) ;
         }
         return sizes ;
+    }
+
+    public static List<Product> load() throws IOException {
+        // List<String> items = Arrays.asList(str.split("\\s*,\\s*"));
+        // creates a CSV parser
+        CsvParserSettings settings = new CsvParserSettings();
+        //the file used in the example uses '\n' as the line separator sequence.
+        //the line separator sequence is defined here to ensure systems such as MacOS and Windows
+        //are able to process this file correctly (MacOS uses '\r'; and Windows uses '\r\n').
+        settings.getFormat().setLineSeparator("\n");
+        CsvParser parser = new CsvParser(settings);
+
+        // call beginParsing to read records one by one, iterator-style.
+        parser.beginParsing(getReader("/examples/example.csv"));
+
+        String[] row;
+        while ((row = parser.parseNext()) != null) {
+            println(out, Arrays.toString(row));
+        }
+
+        // The resources are closed automatically when the end of the input is reached,
+        // or when an error happens, but you can call stopParsing() at any time.
+
+        // You only need to use this if you are not parsing the entire content.
+        // But it doesn't hurt if you call it anyway.
+        parser.stopParsing();
+
+    }
+
+    public static Reader getReader(String relativePath) throws IOException {
+	    return new InputStreamReader(new FileInputStream(relativePath), "UTF-8");
     }
 
     public static void persist(List<Product> products) throws IOException {
