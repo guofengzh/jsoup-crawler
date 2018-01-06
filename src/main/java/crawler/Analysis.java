@@ -38,6 +38,7 @@ public class Analysis {
                 product.on_off_shelf = "On Shelf" ;
                 product.on_shelf_date = currentDate ;
                 product.sizes_in_short = product.noStockSize ;
+                newProductMap.put(product.code, product) ;
             } else {
                 // 已有的商品
                 Product lastProduct = lastProductMap.get(product.code);

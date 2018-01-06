@@ -36,7 +36,7 @@ public class PersistProducts {
                 writer.addValue(product.productUrl);
                 writer.addValue(product.on_off_shelf);
                 writer.addValue(product.on_shelf_date);
-                writer.addValue(product.on_shelf_date);
+                writer.addValue(product.off_shelf_date);
                 writer.addValue(listToString(product.sizes_in_short));
                 writer.addValue(product.sale_off_rate);
                 writer.addValue(listToString(product.complements));
