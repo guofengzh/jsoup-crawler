@@ -24,7 +24,7 @@ public class Main {
     public static void main(String[] args ) throws IOException {
         File f = new File("matchesfashion.csv") ;
 
-        logger.info("test---------");
+        logger.info("start the job");
         // crawling
         CrawingProducts crawingProducts = new CrawingProducts() ;
         List<Product> products = crawingProducts.crawle() ;
