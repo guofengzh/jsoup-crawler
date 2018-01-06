@@ -64,7 +64,12 @@ public class Analysis {
         if (lastProduct != null) {
             double price = toDouble(product.lister__item__price) ;
             double lastPrice = toDouble(lastProduct.lister__item__price) ;
-            product.sale_off_rate = (price - lastPrice) / price ;
+            double rate = (price - lastPrice) / price ;
+            if ( rate == 0 ) {
+                product.sale_off_rate = lastProduct.sale_off_rate;
+            } else {
+                product.sale_off_rate = rate != 0.0 ? rate : null ;
+            }
         }
 
         /** 新补码的列表 */
