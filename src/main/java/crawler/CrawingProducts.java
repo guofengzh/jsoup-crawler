@@ -12,13 +12,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.*;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class JsoupMain {
-    public static int totalPage = 5 ;
-    public static void main(String[] args) throws IOException {
+public class CrawingProducts {
+    public static final int totalPage = 200 ;
+
+    public List<Product> crawle() throws IOException {
         int i ;
         List<Product> allProducts = new ArrayList<>() ;
         for (i = 1 ; i <= totalPage ; i++ ) {
@@ -27,8 +27,9 @@ public class JsoupMain {
                 if ( products.isEmpty())
                     break ;
                 allProducts.addAll(products) ;
+                long t = new Date().getTime() % 10 ;
                 try {
-                    Thread.sleep( 5 * 1000);
+                    Thread.sleep(  (5 + t ) * 1000 ) ; // random stop sometime
                 } catch (InterruptedException e) {
                     System.out.println("Page " + i) ;
                     e.printStackTrace();
@@ -39,7 +40,7 @@ public class JsoupMain {
             }
         }
         System.out.println("Total products " + allProducts.size() + " on " + (i-1) + " pages") ;
-        persist(allProducts);
+        return allProducts;
     }
 
     public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=120&sort=" ;
@@ -74,10 +75,10 @@ public class JsoupMain {
         Element sizesElement = element.getElementsByClass("sizes").first() ;
         List<String> sizes = getSizes(sizesElement) ;
         List<String> noStockSizes = getNoStockSizes(sizesElement) ;
-        String productUrl = product.getProductUrl() ;
-        product.setCode(productUrl.substring(productUrl.lastIndexOf("-") + 1));
-        product.setSizes(sizes);
-        product.setNoStock(noStockSizes);
+        String productUrl = product.productUrl ;
+        product.code = productUrl.substring(productUrl.lastIndexOf("-") + 1) ;
+        product.sizes = sizes;
+        product.noStockSize = noStockSizes ;
         return product ;
     }
 
@@ -88,7 +89,7 @@ public class JsoupMain {
         String lister__item__price = content.getElementsByClass("lister__item__price").text() ;
         String lister__item__slug = content.getElementsByClass("lister__item__slug").text() ;
         Product product = new Product(title, lister__item__details, lister__item__price, lister__item__slug) ;
-        product.setProductUrl(url) ;
+        product.productUrl = url ;
         return product ;
     }
 
@@ -116,71 +117,5 @@ public class JsoupMain {
                 sizes.add(sizeText) ;
         }
         return sizes ;
-    }
-
-    public static List<Product> load() throws IOException {
-        // List<String> items = Arrays.asList(str.split("\\s*,\\s*"));
-        // creates a CSV parser
-        CsvParserSettings settings = new CsvParserSettings();
-        //the file used in the example uses '\n' as the line separator sequence.
-        //the line separator sequence is defined here to ensure systems such as MacOS and Windows
-        //are able to process this file correctly (MacOS uses '\r'; and Windows uses '\r\n').
-        settings.getFormat().setLineSeparator("\n");
-        CsvParser parser = new CsvParser(settings);
-
-        // call beginParsing to read records one by one, iterator-style.
-        parser.beginParsing(getReader("/examples/example.csv"));
-
-        String[] row;
-        while ((row = parser.parseNext()) != null) {
-            println(out, Arrays.toString(row));
-        }
-
-        // The resources are closed automatically when the end of the input is reached,
-        // or when an error happens, but you can call stopParsing() at any time.
-
-        // You only need to use this if you are not parsing the entire content.
-        // But it doesn't hurt if you call it anyway.
-        parser.stopParsing();
-
-    }
-
-    public static Reader getReader(String relativePath) throws IOException {
-	    return new InputStreamReader(new FileInputStream(relativePath), "UTF-8");
-    }
-
-    public static void persist(List<Product> products) throws IOException {
-        Date date = new Date() ;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String stringDate = dateFormat.format(date);
-        try(
-                OutputStream outputStream = new FileOutputStream("matchesfashion-" + stringDate + ".csv");
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8"))
-        {
-            TsvWriter writer = new TsvWriter(outputStreamWriter, new TsvWriterSettings()) ;
-            writer.writeHeaders(Product.header);
-            for(Product product : products) {
-                writer.addValue(product.getCode());
-                writer.addValue(product.getTitle());
-                writer.addValue(product.getLister__item__details());
-                writer.addValue(product.getLister__item__price());
-                writer.addValue(Joiner.on(",")
-                        .skipNulls()
-                        .join(product.getSizes()));
-                writer.addValue(Joiner.on(",")
-                        .skipNulls()
-                        .join(product.getNoStock()));
-                writer.addValue(product.getProductUrl());
-                writer.addValue(product.getLister__item__slug());
-                writer.addValue(product.getOn_shelf());
-                writer.addValue(product.getOff_shelf());
-                writer.addValue(product.getNew_product());
-                writer.addValue(product.getSale_off());
-                writer.addValue(product.getShort_in_size());
-                writer.addValue(product.getComplement());
-                //flushes all values to the output, creating a row.
-                writer.writeValuesToRow();
-            }
-        }
     }
 }
