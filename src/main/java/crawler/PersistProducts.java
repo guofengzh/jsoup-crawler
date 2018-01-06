@@ -32,24 +32,26 @@ public class PersistProducts {
                 writer.addValue(product.title);
                 writer.addValue(product.lister__item__details);
                 writer.addValue(product.lister__item__price);
-                writer.addValue(Joiner.on(",")
-                        .skipNulls()
-                        .join(product.sizes)) ;
+                writer.addValue(listToString(product.sizes)) ;
                 writer.addValue(product.productUrl);
                 writer.addValue(product.on_off_shelf);
                 writer.addValue(product.on_shelf_date);
                 writer.addValue(product.on_shelf_date);
-                writer.addValue(Joiner.on(",")
-                        .skipNulls()
-                        .join(product.sizes_in_short));
+                writer.addValue(listToString(product.sizes_in_short));
                 writer.addValue(product.sale_off_rate);
-                writer.addValue(Joiner.on(",")
-                        .skipNulls()
-                        .join(product.complements);
+                writer.addValue(listToString(product.complements));
                 writer.addValue(product.complement_date);
                 //flushes all values to the output, creating a row.
                 writer.writeValuesToRow();
             }
         }
+    }
+
+    private String listToString(List<String> s) {
+        if (s == null || s.isEmpty()) return null ;
+
+        return Joiner.on(",")
+                .skipNulls()
+                .join(s);
     }
 }

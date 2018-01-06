@@ -1,5 +1,8 @@
 package crawler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,9 +19,12 @@ public class Main {
     private static String path = "matchesfashion.csv" ;
     private static String backupFile = "matchesfashion-" + stringDate + ".csv" ;
 
+    final static Logger logger = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args ) throws IOException {
         File f = new File("matchesfashion.csv") ;
 
+        logger.info("test---------");
         // crawling
         CrawingProducts crawingProducts = new CrawingProducts() ;
         List<Product> products = crawingProducts.crawle() ;
