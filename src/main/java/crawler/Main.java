@@ -18,13 +18,25 @@ public class Main {
 
     public static void main(String[] args ) throws IOException {
         File f = new File("matchesfashion.csv") ;
+
+        // crawling
         CrawingProducts crawingProducts = new CrawingProducts() ;
         List<Product> products = crawingProducts.crawle() ;
-        List<Product> lastProducts = new LoadProducts().load() ;
-        new Analysis().analyze(products, lastProducts) ;
-        new PersistProducts().persist(products);
-        Path source = Paths.get(path);
-        Path destination = Paths.get(backupFile);
-        Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+
+        // load last crawled products
+        File lastFile = new File(path) ;
+        if (lastFile.exists()) {
+            List<Product> lastProducts = new LoadProducts().load(new File(path));
+            // analysis
+            new Analysis().analyze(products, lastProducts) ;
+
+            // backup
+            Path source = Paths.get(path);
+            Path destination = Paths.get(backupFile);
+            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        // persist new products
+        new PersistProducts().persist(products, lastFile);
     }
 }

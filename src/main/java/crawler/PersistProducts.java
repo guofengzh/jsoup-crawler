@@ -20,12 +20,9 @@ import java.util.List;
 
 public class PersistProducts {
 
-    public void persist(List<Product> products) throws IOException {
-        Date date = new Date() ;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String stringDate = dateFormat.format(date);
+    public void persist(List<Product> products, File file) throws IOException {
         try(
-                OutputStream outputStream = new FileOutputStream("matchesfashion-" + stringDate + ".csv");
+                OutputStream outputStream = new FileOutputStream(file);
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8"))
         {
             TsvWriter writer = new TsvWriter(outputStreamWriter, new TsvWriterSettings()) ;
@@ -42,9 +39,13 @@ public class PersistProducts {
                 writer.addValue(product.on_off_shelf);
                 writer.addValue(product.on_shelf_date);
                 writer.addValue(product.on_shelf_date);
-                writer.addValue(product.sizes_in_short);
+                writer.addValue(Joiner.on(",")
+                        .skipNulls()
+                        .join(product.sizes_in_short));
                 writer.addValue(product.sale_off_rate);
-                writer.addValue(product.complements);
+                writer.addValue(Joiner.on(",")
+                        .skipNulls()
+                        .join(product.complements);
                 writer.addValue(product.complement_date);
                 //flushes all values to the output, creating a row.
                 writer.writeValuesToRow();

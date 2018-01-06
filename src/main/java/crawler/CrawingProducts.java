@@ -16,24 +16,26 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CrawingProducts {
-    public static final int totalPage = 200 ;
+    public static final int totalPage = 5 ;
 
     public List<Product> crawle() throws IOException {
         int i ;
         List<Product> allProducts = new ArrayList<>() ;
         for (i = 1 ; i <= totalPage ; i++ ) {
             try {
+                System.out.println("Extracting page " + i);
+                long t = new Date().getTime() % 10 ;
+                Thread.sleep(  (5 + t ) * 1000 ) ; // random stop sometime
+            } catch (InterruptedException e) {
+                System.out.println("Page " + i) ;
+                e.printStackTrace();
+            }
+
+            try {
                 List<Product> products = getPage(i);
                 if ( products.isEmpty())
                     break ;
                 allProducts.addAll(products) ;
-                long t = new Date().getTime() % 10 ;
-                try {
-                    Thread.sleep(  (5 + t ) * 1000 ) ; // random stop sometime
-                } catch (InterruptedException e) {
-                    System.out.println("Page " + i) ;
-                    e.printStackTrace();
-                }
             } catch (Throwable t ) {
                 System.out.println("Error when scrawl page " + i ) ;
                 t.printStackTrace();
@@ -45,7 +47,6 @@ public class CrawingProducts {
 
     public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=120&sort=" ;
     public static List<Product> getPage(int i ) throws IOException {
-        System.out.println("Extracting page " + i);
         String url = String.format(fmt, i) ;
         Connection.Response response = null;
         response = Jsoup.connect(url)

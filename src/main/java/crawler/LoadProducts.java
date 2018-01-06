@@ -8,10 +8,7 @@ import com.univocity.parsers.tsv.TsvWriterSettings;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class LoadProducts {
 
@@ -21,6 +18,7 @@ public class LoadProducts {
         //the line separator sequence is defined here to ensure systems such as MacOS and Windows
         //are able to process this file correctly (MacOS uses '\r'; and Windows uses '\r\n').
         settings.getFormat().setLineSeparator("\n");
+        settings.getFormat().setDelimiter('\t');
 
         // creates a CSV parser
         CsvParser parser = new CsvParser(settings);
@@ -28,7 +26,12 @@ public class LoadProducts {
         // parses all rows in one go.
         List<Product> allProducts = new ArrayList<>() ;
         List<String[]> allRows = parser.parseAll(getReader(file));
-        for (String[] row : allRows ) {
+        Iterator<String[]> allRowsIter = allRows.iterator() ;
+        // skip the kead
+        allRowsIter.next() ;
+        while( allRowsIter.hasNext()) {
+            String[] row = allRowsIter.next() ;
+            System.out.println(row[0]) ;
             Product product = parseOneRow(row) ;
             allProducts.add(product) ;
         }
@@ -43,18 +46,18 @@ public class LoadProducts {
     private Product parseOneRow(String[] row) {
         Product product = new Product() ;
         product.code = row[0];
-        product.title = row[2] ;
-        product.lister__item__details = row[3] ;
-        product.lister__item__price = row[4] ;
-        product.sizes = toList(row[5]) ;
-        product.productUrl = row[6] ;
-        product.on_off_shelf = row[7] ;
-        product.on_shelf_date = row[8];
-        product.off_shelf_date = row[9];
-        product.sizes_in_short = toList(row[10]) ;
-        product.sale_off_rate = Double.parseDouble(row[11]);
-        product.complements = toList(row[12]) ;
-        product.complement_date = row[13] ;
+        product.title = row[1] ;
+        product.lister__item__details = row[2] ;
+        product.lister__item__price = row[3] ;
+        product.sizes = toList(row[4]) ;
+        product.productUrl = row[5] ;
+        product.on_off_shelf = row[6] ;
+        product.on_shelf_date = row[7];
+        product.off_shelf_date = row[8];
+        product.sizes_in_short = toList(row[9]) ;
+        product.sale_off_rate = row[10] != null && !row[10].isEmpty()?Double.parseDouble(row[10]):null;
+        product.complements = toList(row[11]) ;
+        product.complement_date = row[12] ;
         return product ;
     }
 

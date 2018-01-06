@@ -46,10 +46,12 @@ public class Analysis {
         }
         for (Product lastProduct : lastProducts ) {
             if( !newProductMap.containsKey(lastProduct.code)) {
-                // 下架的商品
-                lastProduct.on_off_shelf = "Off Shelf" ;
-                lastProduct.off_shelf_date = currentDate ;
-                newProductMap.put(lastProduct.code, lastProduct) ;
+                // 这次下架的商品
+                if ( !lastProduct.on_off_shelf.equals("Off Shelf")) {
+                    lastProduct.on_off_shelf = "Off Shelf" ;
+                    lastProduct.off_shelf_date = currentDate ;
+                }
+                newProducts.add(lastProduct) ;
             }
         }
     }
@@ -60,8 +62,8 @@ public class Analysis {
         product.sizes_in_short = product.noStockSize ;
         /** 降价(-)或升价的(+)% */
         if (lastProduct != null) {
-            double price = Double.parseDouble(product.lister__item__price.substring(1)) ;
-            double lastPrice = Double.parseDouble(lastProduct.lister__item__price.substring(1)) ;
+            double price = toDouble(product.lister__item__price) ;
+            double lastPrice = toDouble(lastProduct.lister__item__price) ;
             product.sale_off_rate = (price - lastPrice) / price ;
         }
 
@@ -77,5 +79,12 @@ public class Analysis {
             product.complements = lastProduct.complements ;
             product.complement_date = lastProduct.complement_date ;
         }
+    }
+
+    private double toDouble(String s) {
+        if (!Character.isDigit(s.charAt(0)))
+            s = s.substring(1) ;
+        s =  s.replace(",", "") ;
+        return Double.parseDouble(s) ;
     }
 }
