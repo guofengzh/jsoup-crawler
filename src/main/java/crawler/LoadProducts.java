@@ -57,8 +57,9 @@ public class LoadProducts {
         product.sizes_in_short_last = toList(row[10]) ;
         product.sizes_in_short_date = row[11] ;
         product.sale_off_rate = row[12] != null && !row[12].isEmpty()?Double.parseDouble(row[12]):null;
-        product.complements = toList(row[13]) ;
-        product.complement_date = row[14] ;
+        product.sale_off_rate_date = row[13] ;
+        product.complements = toList(row[14]) ;
+        product.complement_date = row[15] ;
         return product ;
     }
 

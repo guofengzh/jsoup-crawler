@@ -41,6 +41,7 @@ public class PersistProducts {
                 writer.addValue(listToString(product.sizes_in_short_last));
                 writer.addValue(product.sizes_in_short_date);
                 writer.addValue(product.sale_off_rate);
+                writer.addValue(product.sale_off_rate_date) ;
                 writer.addValue(listToString(product.complements));
                 writer.addValue(product.complement_date);
                 //flushes all values to the output, creating a row.

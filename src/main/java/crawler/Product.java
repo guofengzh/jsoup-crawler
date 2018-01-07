@@ -9,7 +9,7 @@ public class Product {
             {"product_code", "title", "details", "price", "sizes", "sizes_in_short", "product_url",
              "on_off_shelf", "on_shelf_date", "off_shelf_date",
               "sizes_in_short_last", "sizes_in_short_date",
-             "sale_off_rate", "complements", "complements_date" } ;
+             "sale_off_rate", "sale_off_rate_date", "complements", "complements_date" } ;
     /** product code */
     public String code ;
     /** product ttile */
@@ -41,6 +41,8 @@ public class Product {
     public String sizes_in_short_date ;
     /** 降价(-)或升价的(+)% */
     public Double sale_off_rate ;
+    /** 价钱变化 的时间 */
+    public String sale_off_rate_date ;
     /** 新补码的列表 */
     public List<String> complements ;
     /** 补码的时间 */

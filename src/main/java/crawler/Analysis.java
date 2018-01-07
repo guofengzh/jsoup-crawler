@@ -27,19 +27,28 @@ public class Analysis {
                 product.on_shelf_date = currentDate ;
                 newProductMap.put(product.code, product) ;
             } else {
-                // 已有的商品
+                // 已有的商品，保持上架状态
                 Product lastProduct = lastProductMap.get(product.code);
+                product.on_off_shelf = lastProduct.on_off_shelf ;
+                product.on_shelf_date = lastProduct.on_shelf_date ;
+
+                // 分析其它参数
                 analyzeProduct(product, lastProduct);
             }
         }
         for (Product lastProduct : lastProducts ) {
-            if( !newProductMap.containsKey(lastProduct.code)) {
+            if(!newProductMap.containsKey(lastProduct.code)) {
                 // 这次下架的商品
-                if ( !lastProduct.on_off_shelf.equals("Off Shelf")) {
+                if ( lastProduct.on_off_shelf == null || !lastProduct.on_off_shelf.equals("Off Shelf")) {
                     lastProduct.on_off_shelf = "Off Shelf" ;
                     lastProduct.off_shelf_date = currentDate ;
                 }
                 newProducts.add(lastProduct) ;
+            } else {
+                // 保持下架状态
+                Product newProduct = newProductMap.get(lastProduct.code) ;
+                newProduct.on_off_shelf = lastProduct.on_off_shelf ;
+                newProduct.off_shelf_date = lastProduct.off_shelf_date ;
             }
         }
     }
@@ -52,27 +61,26 @@ public class Analysis {
         noStocks.removeAll(lastNoStack) ;
         if (noStocks.isEmpty()) {
             // 没有变化
+            product.sizes_in_short_last = lastProduct.sizes_in_short_last ;
             product.sizes_in_short_date = lastProduct.sizes_in_short_date ;
         } else {
             // 有变化
-            product.sizes_in_short_date = currentDate ;
-            /** 断码列表 */
-            product.sizes_in_short = product.noStockSize ;
             product.sizes_in_short_last = new ArrayList<>(noStocks) ;
+            product.sizes_in_short_date = currentDate ;
         }
 
         /** 降价(-)或升价的(+)% */
-        if (lastProduct != null) {
-            if (product.lister__item__price == lastProduct.lister__item__price) {
-                // 价钱未变
-                product.sale_off_rate = lastProduct.sale_off_rate;
-            } else {
-                // 价钱变了
-                double price = product.lister__item__price ;
-                double lastPrice = lastProduct.lister__item__price ;
-                double rate = (price - lastPrice) / price ;
-                product.sale_off_rate = (double)(long)(rate * 100) ;
-            }
+        if (product.lister__item__price.equals(lastProduct.lister__item__price)) {
+            // 价钱未变
+            product.sale_off_rate = lastProduct.sale_off_rate;
+            product.sale_off_rate_date = lastProduct.sale_off_rate_date ;
+        } else {
+            // 价钱变了
+            double price = product.lister__item__price ;
+            double lastPrice = lastProduct.lister__item__price ;
+            double rate = (price - lastPrice) / price ;
+            product.sale_off_rate = (double)(long)(rate * 100) ;
+            product.sale_off_rate_date = currentDate ;
         }
 
         /** 新补码的列表 */
