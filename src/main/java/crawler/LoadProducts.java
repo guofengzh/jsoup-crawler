@@ -31,7 +31,6 @@ public class LoadProducts {
         allRowsIter.next() ;
         while( allRowsIter.hasNext()) {
             String[] row = allRowsIter.next() ;
-            System.out.println(row[0]) ;
             Product product = parseOneRow(row) ;
             allProducts.add(product) ;
         }
