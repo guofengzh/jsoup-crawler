@@ -33,11 +33,11 @@ public class PersistProducts {
                 writer.addValue(product.lister__item__details);
                 writer.addValue(product.lister__item__price);
                 writer.addValue(listToString(product.sizes)) ;
+                writer.addValue(listToString(product.sizes_in_short));
                 writer.addValue(product.productUrl);
                 writer.addValue(product.on_off_shelf);
                 writer.addValue(product.on_shelf_date);
                 writer.addValue(product.off_shelf_date);
-                writer.addValue(listToString(product.sizes_in_short));
                 writer.addValue(listToString(product.sizes_in_short_last));
                 writer.addValue(product.sizes_in_short_date);
                 writer.addValue(product.sale_off_rate);

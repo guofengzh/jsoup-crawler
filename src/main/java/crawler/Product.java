@@ -6,9 +6,9 @@ import java.util.List;
 
 public class Product {
     public static final String[] header =
-            {"product_code", "title", "details", "price", "sizes", "product_url",
+            {"product_code", "title", "details", "price", "sizes", "sizes_in_short", "product_url",
              "on_off_shelf", "on_shelf_date", "off_shelf_date",
-             "sizes_in_short", "sizes_in_short_last", "sizes_in_short_date",
+              "sizes_in_short_last", "sizes_in_short_date",
              "sale_off_rate", "complements", "complements_date" } ;
     /** product code */
     public String code ;

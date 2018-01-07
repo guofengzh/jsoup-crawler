@@ -1,17 +1,5 @@
 package crawler;
 
-import com.google.common.base.Joiner;
-import com.univocity.parsers.csv.CsvParser;
-import com.univocity.parsers.csv.CsvParserSettings;
-import com.univocity.parsers.tsv.TsvWriter;
-import com.univocity.parsers.tsv.TsvWriterSettings;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -32,12 +20,11 @@ public class Analysis {
         }
 
         for(Product product : newProducts ) {
-            // 分析产品的上下架问题
+           // 分析产品的上下架问题
             if (!lastProductMap.containsKey(product.code)) {
                 // 新品上架
                 product.on_off_shelf = "On Shelf" ;
                 product.on_shelf_date = currentDate ;
-                product.sizes_in_short = product.noStockSize ;
                 newProductMap.put(product.code, product) ;
             } else {
                 // 已有的商品

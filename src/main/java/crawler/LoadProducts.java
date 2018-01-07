@@ -49,11 +49,11 @@ public class LoadProducts {
         product.lister__item__details = row[2] ;
         product.lister__item__price = Utils.toDouble(row[3]) ;
         product.sizes = toList(row[4]) ;
-        product.productUrl = row[5] ;
-        product.on_off_shelf = row[6] ;
-        product.on_shelf_date = row[7];
-        product.off_shelf_date = row[8];
-        product.sizes_in_short = toList(row[9]) ;
+        product.sizes_in_short = toList(row[5]) ;
+        product.productUrl = row[6] ;
+        product.on_off_shelf = row[7] ;
+        product.on_shelf_date = row[8];
+        product.off_shelf_date = row[9];
         product.sizes_in_short_last = toList(row[10]) ;
         product.sizes_in_short_date = row[11] ;
         product.sale_off_rate = row[12] != null && !row[12].isEmpty()?Double.parseDouble(row[12]):null;

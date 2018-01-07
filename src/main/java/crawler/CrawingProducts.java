@@ -1,15 +1,12 @@
 package crawler;
 
-import com.google.common.base.Joiner;
-import com.univocity.parsers.csv.CsvParser;
-import com.univocity.parsers.csv.CsvParserSettings;
-import com.univocity.parsers.tsv.TsvWriter;
-import com.univocity.parsers.tsv.TsvWriterSettings;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -17,6 +14,9 @@ import java.util.*;
 
 public class CrawingProducts {
     public static final int totalPage = 5 ;
+    public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=120&sort=" ;
+
+    final static Logger logger = LoggerFactory.getLogger(CrawingProducts.class);
 
     public List<Product> crawle() throws IOException {
         int i ;
@@ -36,12 +36,11 @@ public class CrawingProducts {
                 break ;
             allProducts.addAll(products) ;
         }
-        System.out.println("Total products " + allProducts.size() + " on " + (i-1) + " pages") ;
+        logger.info("Total products " + allProducts.size() + " on " + (i-1) + " pages"); ;
         return allProducts;
     }
 
-    public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=120&sort=" ;
-    public static List<Product> getPage(int i ) throws IOException {
+    public List<Product> getPage(int i ) throws IOException {
         String url = String.format(fmt, i) ;
         Connection.Response response = null;
         response = Jsoup.connect(url)
@@ -64,7 +63,7 @@ public class CrawingProducts {
         return products ;
     }
 
-    public static Product makeProduct(Element element) {
+    public Product makeProduct(Element element) {
         Element productMainLink = element.getElementsByClass("productMainLink").first() ;
         Product product = processProductMainLink(productMainLink) ;
         Element sizesElement = element.getElementsByClass("sizes").first() ;
@@ -74,10 +73,11 @@ public class CrawingProducts {
         product.code = productUrl.substring(productUrl.lastIndexOf("-") + 1) ;
         product.sizes = sizes;
         product.noStockSize = noStockSizes ;
+        product.sizes_in_short = product.noStockSize ;
         return product ;
     }
 
-    public static Product processProductMainLink(Element content) {
+    public Product processProductMainLink(Element content) {
         String url = content.attr("href") ;
         String title = content.getElementsByClass("lister__item__title").text() ;
         String lister__item__details = content.getElementsByClass("lister__item__details").text() ;
@@ -88,7 +88,7 @@ public class CrawingProducts {
         return product ;
     }
 
-    public static List<String> getNoStockSizes(Element element) {
+    public List<String> getNoStockSizes(Element element) {
         Elements liElements = element.getElementsByTag("li") ;
         List<String> sizes = new ArrayList<>() ;
         for ( Element oneElement : liElements ) {
@@ -101,7 +101,7 @@ public class CrawingProducts {
         return sizes ;
     }
 
-    public static List<String> getSizes(Element element) {
+    public List<String> getSizes(Element element) {
         Elements liElements = element.getElementsByTag("li") ;
         List<String> sizes = new ArrayList<>() ;
         for ( Element oneElement : liElements ) {
