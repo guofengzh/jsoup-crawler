@@ -24,22 +24,17 @@ public class CrawingProducts {
         for (i = 1 ; i <= totalPage ; i++ ) {
             try {
                 System.out.println("Extracting page " + i);
-                long t = new Date().getTime() % 10 ;
+                long t = System.currentTimeMillis() % 5 ;
                 Thread.sleep(  (5 + t ) * 1000 ) ; // random stop sometime
             } catch (InterruptedException e) {
                 System.out.println("Page " + i) ;
                 e.printStackTrace();
             }
 
-            try {
-                List<Product> products = getPage(i);
-                if ( products.isEmpty())
-                    break ;
-                allProducts.addAll(products) ;
-            } catch (Throwable t ) {
-                System.out.println("Error when scrawl page " + i ) ;
-                t.printStackTrace();
-            }
+            List<Product> products = getPage(i);
+            if ( products.isEmpty())
+                break ;
+            allProducts.addAll(products) ;
         }
         System.out.println("Total products " + allProducts.size() + " on " + (i-1) + " pages") ;
         return allProducts;
@@ -87,7 +82,7 @@ public class CrawingProducts {
         String url = content.attr("href") ;
         String title = content.getElementsByClass("lister__item__title").text() ;
         String lister__item__details = content.getElementsByClass("lister__item__details").text() ;
-        String lister__item__price = content.getElementsByClass("lister__item__price").text() ;
+        Double lister__item__price = Utils.toDouble(content.getElementsByClass("lister__item__price").text()) ;
         String lister__item__slug = content.getElementsByClass("lister__item__slug").text() ;
         Product product = new Product(title, lister__item__details, lister__item__price, lister__item__slug) ;
         product.productUrl = url ;

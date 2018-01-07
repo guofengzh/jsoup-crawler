@@ -48,16 +48,17 @@ public class LoadProducts {
         product.code = row[0];
         product.title = row[1] ;
         product.lister__item__details = row[2] ;
-        product.lister__item__price = row[3] ;
+        product.lister__item__price = Utils.toDouble(row[3]) ;
         product.sizes = toList(row[4]) ;
         product.productUrl = row[5] ;
         product.on_off_shelf = row[6] ;
         product.on_shelf_date = row[7];
         product.off_shelf_date = row[8];
         product.sizes_in_short = toList(row[9]) ;
-        product.sale_off_rate = row[10] != null && !row[10].isEmpty()?Double.parseDouble(row[10]):null;
-        product.complements = toList(row[11]) ;
-        product.complement_date = row[12] ;
+        product.sizes_in_short_date = row[10] ;
+        product.sale_off_rate = row[11] != null && !row[11].isEmpty()?Double.parseDouble(row[11]):null;
+        product.complements = toList(row[12]) ;
+        product.complement_date = row[13] ;
         return product ;
     }
 

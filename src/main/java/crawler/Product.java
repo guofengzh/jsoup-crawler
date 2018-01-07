@@ -7,8 +7,8 @@ import java.util.List;
 public class Product {
     public static final String[] header =
             {"product_code", "title", "details", "price", "sizes", "product_url",
-             "on_off_shelf", "on_shelf_date", "off_shelf_date", "sizes_in_short", "sale_off_rate",
-             "complements", "complements_date" } ;
+             "on_off_shelf", "on_shelf_date", "off_shelf_date", "sizes_in_short", "sizes_in_short_date",
+             "sale_off_rate", "complements", "complements_date" } ;
     /** product code */
     public String code ;
     /** product ttile */
@@ -16,7 +16,7 @@ public class Product {
     /** product details */
     public String lister__item__details ;
     /* product price - like $ 456 */
-    public String lister__item__price ;
+    public Double lister__item__price ;
     /** Runaway */
     public String lister__item__slug ;
     /** product size */
@@ -34,6 +34,8 @@ public class Product {
     public String off_shelf_date ;
     /** 断码码列表 */
     public List<String> sizes_in_short ;
+    /**最近一次发生代码缺失变化的时间*/
+    public String sizes_in_short_date ;
     /** 降价(-)或升价的(+)% */
     public Double sale_off_rate ;
     /** 新补码的列表 */
@@ -44,7 +46,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String title, String lister__item__details, String lister__item__price, String lister__item__slug) {
+    public Product(String title, String lister__item__details, Double lister__item__price, String lister__item__slug) {
         this.title = title;
         this.lister__item__details = lister__item__details;
         this.lister__item__price = lister__item__price;

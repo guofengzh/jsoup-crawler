@@ -59,23 +59,37 @@ public class Analysis {
 
     private void analyzeProduct(Product product, Product lastProduct) {
         // 最新上下架 - 不在这里分析
-        /** 断码列表 */
-        product.sizes_in_short = product.noStockSize ;
+        // 断码列表有变化吗？
+        Set<String> noStocks = new TreeSet<>(product.noStockSize) ;
+        Set<String> lastNoStack = new TreeSet<>(lastProduct.noStockSize) ;
+        noStocks.removeAll(lastNoStack) ;
+        if (noStocks.isEmpty()) {
+            // 没有变化
+            product.sizes_in_short_date = lastProduct.sizes_in_short_date ;
+        } else {
+            // 有变化
+            product.sizes_in_short_date = currentDate ;
+            /** 断码列表 */
+            product.sizes_in_short = product.noStockSize ;
+        }
+
         /** 降价(-)或升价的(+)% */
         if (lastProduct != null) {
-            double price = toDouble(product.lister__item__price) ;
-            double lastPrice = toDouble(lastProduct.lister__item__price) ;
-            double rate = (price - lastPrice) / price ;
-            if ( rate == 0 ) {
+            if (product.lister__item__price == lastProduct.lister__item__price) {
+                // 价钱未变
                 product.sale_off_rate = lastProduct.sale_off_rate;
             } else {
-                product.sale_off_rate = rate != 0.0 ? rate : null ;
+                // 价钱变了
+                double price = product.lister__item__price ;
+                double lastPrice = lastProduct.lister__item__price ;
+                double rate = (price - lastPrice) / price ;
+                product.sale_off_rate = (double)(long)(rate * 100) ;
             }
         }
 
         /** 新补码的列表 */
-        Set<String> sizes = new HashSet<>(product.sizes) ;
-        Set<String> lastSizes = new HashSet<>(lastProduct.sizes) ;
+        Set<String> sizes = new TreeSet<>(product.sizes) ;
+        Set<String> lastSizes = new TreeSet<>(lastProduct.sizes) ;
         sizes.removeAll(lastSizes) ;
         product.complements = new ArrayList<>(sizes) ;
         if (!product.complements.isEmpty()) { // 今天补码了
@@ -85,12 +99,5 @@ public class Analysis {
             product.complements = lastProduct.complements ;
             product.complement_date = lastProduct.complement_date ;
         }
-    }
-
-    private double toDouble(String s) {
-        if (!Character.isDigit(s.charAt(0)))
-            s = s.substring(1) ;
-        s =  s.replace(",", "") ;
-        return Double.parseDouble(s) ;
     }
 }
