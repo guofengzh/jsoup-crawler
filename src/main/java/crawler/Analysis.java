@@ -61,7 +61,7 @@ public class Analysis {
         // 最新上下架 - 不在这里分析
         // 断码列表有变化吗？
         Set<String> noStocks = new TreeSet<>(product.noStockSize) ;
-        Set<String> lastNoStack = new TreeSet<>(lastProduct.noStockSize) ;
+        Set<String> lastNoStack = new TreeSet<>(lastProduct.sizes_in_short) ;
         noStocks.removeAll(lastNoStack) ;
         if (noStocks.isEmpty()) {
             // 没有变化
@@ -71,6 +71,7 @@ public class Analysis {
             product.sizes_in_short_date = currentDate ;
             /** 断码列表 */
             product.sizes_in_short = product.noStockSize ;
+            product.sizes_in_short_last = new ArrayList<>(noStocks) ;
         }
 
         /** 降价(-)或升价的(+)% */

@@ -55,10 +55,11 @@ public class LoadProducts {
         product.on_shelf_date = row[7];
         product.off_shelf_date = row[8];
         product.sizes_in_short = toList(row[9]) ;
-        product.sizes_in_short_date = row[10] ;
-        product.sale_off_rate = row[11] != null && !row[11].isEmpty()?Double.parseDouble(row[11]):null;
-        product.complements = toList(row[12]) ;
-        product.complement_date = row[13] ;
+        product.sizes_in_short_last = toList(row[10]) ;
+        product.sizes_in_short_date = row[11] ;
+        product.sale_off_rate = row[12] != null && !row[12].isEmpty()?Double.parseDouble(row[12]):null;
+        product.complements = toList(row[13]) ;
+        product.complement_date = row[14] ;
         return product ;
     }
 

@@ -58,7 +58,6 @@ public class CrawingProducts {
         Elements lister__item__innerElements = doc.getElementsByClass("lister__item__inner") ;
         for (Element element : lister__item__innerElements ) {
             Product product = makeProduct(element) ;
-            System.out.println(product);
             products.add(product) ;
         }
 

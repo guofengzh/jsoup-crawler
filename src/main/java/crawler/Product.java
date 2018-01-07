@@ -7,7 +7,8 @@ import java.util.List;
 public class Product {
     public static final String[] header =
             {"product_code", "title", "details", "price", "sizes", "product_url",
-             "on_off_shelf", "on_shelf_date", "off_shelf_date", "sizes_in_short", "sizes_in_short_date",
+             "on_off_shelf", "on_shelf_date", "off_shelf_date",
+             "sizes_in_short", "sizes_in_short_last", "sizes_in_short_date",
              "sale_off_rate", "complements", "complements_date" } ;
     /** product code */
     public String code ;
@@ -34,6 +35,8 @@ public class Product {
     public String off_shelf_date ;
     /** 断码码列表 */
     public List<String> sizes_in_short ;
+    /**最近一次发生的断码*/
+    public List<String> sizes_in_short_last ;
     /**最近一次发生代码缺失变化的时间*/
     public String sizes_in_short_date ;
     /** 降价(-)或升价的(+)% */
