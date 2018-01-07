@@ -44,11 +44,6 @@ public class Analysis {
                     lastProduct.off_shelf_date = currentDate ;
                 }
                 newProducts.add(lastProduct) ;
-            } else {
-                // 保持下架状态
-                Product newProduct = newProductMap.get(lastProduct.code) ;
-                newProduct.on_off_shelf = lastProduct.on_off_shelf ;
-                newProduct.off_shelf_date = lastProduct.off_shelf_date ;
             }
         }
     }

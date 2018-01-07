@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CrawingProducts {
-    public static final int totalPage = 5 ;
+    public static final int totalPage = 250 ;
     public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=120&sort=" ;
 
     final static Logger logger = LoggerFactory.getLogger(CrawingProducts.class);
@@ -23,7 +23,7 @@ public class CrawingProducts {
         List<Product> allProducts = new ArrayList<>() ;
         for (i = 1 ; i <= totalPage ; i++ ) {
             try {
-                System.out.println("Extracting page " + i);
+                System.out.println("Crawling page " + i);
                 long t = System.currentTimeMillis() % 5 ;
                 Thread.sleep(  (5 + t ) * 1000 ) ; // random stop sometime
             } catch (InterruptedException e) {
