@@ -47,7 +47,7 @@ public class LoadProducts {
         product.code = row[0];
         product.title = row[1] ;
         product.lister__item__details = row[2] ;
-        product.lister__item__price = Utils.toDouble(row[3]) ;
+        product.setLister__item__price(row[3]) ;
         product.sizes = toList(row[4]) ;
         product.sizes_in_short = toList(row[5]) ;
         product.productUrl = row[6] ;

@@ -31,7 +31,7 @@ public class PersistProducts {
                 writer.addValue(product.code);
                 writer.addValue(product.title);
                 writer.addValue(product.lister__item__details);
-                writer.addValue(product.lister__item__price);
+                writer.addValue(product.getPrice());
                 writer.addValue(listToString(product.sizes)) ;
                 writer.addValue(listToString(product.sizes_in_short));
                 writer.addValue(product.productUrl);

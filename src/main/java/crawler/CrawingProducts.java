@@ -7,14 +7,19 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.droidsonroids.jspoon.HtmlAdapter;
+import pl.droidsonroids.jspoon.Jspoon;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CrawingProducts {
-    public static final int totalPage = 250 ;
+    public static final int totalPage = 1 ;
     public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=120&sort=" ;
+
+    Jspoon jspoon = Jspoon.create();
+    HtmlAdapter<Page> htmlAdapter = jspoon.adapter(Page.class);
 
     final static Logger logger = LoggerFactory.getLogger(CrawingProducts.class);
 
@@ -48,69 +53,13 @@ public class CrawingProducts {
                 .timeout(10000)
                 .execute();
         int statusCode = response.statusCode();
-        List<Product> products = new ArrayList<>() ;
         if ( statusCode != 200 ) {
             System.out.println("Status Code: " + statusCode + " at page " + i) ;
-            return products ;
+            return new ArrayList<>() ;
         }
-        Document doc = response.parse();
-        Elements lister__item__innerElements = doc.getElementsByClass("lister__item__inner") ;
-        for (Element element : lister__item__innerElements ) {
-            Product product = makeProduct(element) ;
-            products.add(product) ;
-        }
+        String htmlBodyContent = response.body() ;
+        Page page = htmlAdapter.fromHtml(htmlBodyContent);
 
-        return products ;
-    }
-
-    public Product makeProduct(Element element) {
-        Element productMainLink = element.getElementsByClass("productMainLink").first() ;
-        Product product = processProductMainLink(productMainLink) ;
-        Element sizesElement = element.getElementsByClass("sizes").first() ;
-        List<String> sizes = getSizes(sizesElement) ;
-        List<String> noStockSizes = getNoStockSizes(sizesElement) ;
-        String productUrl = product.productUrl ;
-        product.code = productUrl.substring(productUrl.lastIndexOf("-") + 1) ;
-        product.sizes = sizes;
-        product.noStockSize = noStockSizes ;
-        product.sizes_in_short = product.noStockSize ;
-        return product ;
-    }
-
-    public Product processProductMainLink(Element content) {
-        String url = content.attr("href") ;
-        String title = content.getElementsByClass("lister__item__title").text() ;
-        String lister__item__details = content.getElementsByClass("lister__item__details").text() ;
-        Double lister__item__price = Utils.toDouble(content.getElementsByClass("lister__item__price").text()) ;
-        String lister__item__slug = content.getElementsByClass("lister__item__slug").text() ;
-        Product product = new Product(title, lister__item__details, lister__item__price, lister__item__slug) ;
-        product.productUrl = url ;
-        return product ;
-    }
-
-    public List<String> getNoStockSizes(Element element) {
-        Elements liElements = element.getElementsByTag("li") ;
-        List<String> sizes = new ArrayList<>() ;
-        for ( Element oneElement : liElements ) {
-            String noStock = oneElement.attr("class"); // "noStock"
-            Element anchorElement = oneElement.getElementsByTag("a").first() ;
-            String sizeText = anchorElement.text() ;
-            if ( noStock != null && !noStock.isEmpty())
-                sizes.add(sizeText) ;
-        }
-        return sizes ;
-    }
-
-    public List<String> getSizes(Element element) {
-        Elements liElements = element.getElementsByTag("li") ;
-        List<String> sizes = new ArrayList<>() ;
-        for ( Element oneElement : liElements ) {
-            String noStock = oneElement.attr("class"); // "noStock"
-            Element anchorElement = oneElement.getElementsByTag("a").first() ;
-            String sizeText = anchorElement.text() ;
-            if ( noStock == null  || noStock.isEmpty())
-                sizes.add(sizeText) ;
-        }
-        return sizes ;
+        return page.products ;
     }
 }

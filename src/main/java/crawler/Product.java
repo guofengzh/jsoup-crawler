@@ -1,6 +1,7 @@
 package crawler;
 
 import com.univocity.parsers.annotations.NullString;
+import pl.droidsonroids.jspoon.annotation.Selector;
 
 import java.util.List;
 
@@ -10,21 +11,30 @@ public class Product {
              "on_off_shelf", "on_shelf_date", "off_shelf_date",
               "sizes_in_short_last", "sizes_in_short_date",
              "sale_off_rate", "sale_off_rate_date", "complements", "complements_date" } ;
+
     /** product code */
+    @Selector(value=".productMainLink", attr = "href", format = "(\\d+)")
     public String code ;
     /** product ttile */
+    @Selector(value=".productMainLink .lister__item__title")
     public String title ;
     /** product details */
+    @Selector(value=".productMainLink .lister__item__details")
     public String lister__item__details ;
     /* product price - like $ 456 */
-    public Double lister__item__price ;
+    @Selector(value=".productMainLink .lister__item__price-full")
+    private String lister__item__price ;
     /** Runaway */
+    @Selector(value=".productMainLink .lister__item__slug")
     public String lister__item__slug ;
     /** product size */
+    @Selector(value=".sizes li:not(.noStock)")
     public List<String> sizes ;
     /** no stock size */
+    @Selector(value=".sizes .noStock")
     public List<String> noStockSize ;
     /** product url */
+    @Selector(value=".productMainLink", attr = "href")
     public String productUrl ;
     /* --------------- 分析结果 -------------------*/
     /* 架日期，下架日期，是否新品，降价幅度，断码，补码 */
@@ -50,12 +60,30 @@ public class Product {
 
     public Product() {
     }
-
-    public Product(String title, String lister__item__details, Double lister__item__price, String lister__item__slug) {
-        this.title = title;
-        this.lister__item__details = lister__item__details;
-        this.lister__item__price = lister__item__price;
-        this.lister__item__slug = lister__item__slug;
+    public Double getPrice() {
+        return Utils.toDouble(lister__item__price) ;
     }
 
+    /** not use it, use getPrice instead */
+    public String getLister__item__price() {
+        return lister__item__price;
+    }
+
+    public void setLister__item__price(String lister__item__price) {
+        this.lister__item__price = lister__item__price;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "code='" + code + '\'' +
+                ", title='" + title + '\'' +
+                ", lister__item__details='" + lister__item__details + '\'' +
+                ", lister__item__price=" + lister__item__price +
+                ", lister__item__slug='" + lister__item__slug + '\'' +
+                ", sizes=" + sizes +
+                ", noStockSize=" + noStockSize +
+                ", productUrl='" + productUrl + '\'' +
+                '}';
+    }
 }

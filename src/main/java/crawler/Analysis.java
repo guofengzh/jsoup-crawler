@@ -65,14 +65,14 @@ public class Analysis {
         }
 
         /** 降价(-)或升价的(+)% */
-        if (product.lister__item__price.equals(lastProduct.lister__item__price)) {
+        if (product.getPrice().equals(lastProduct.getPrice())) {
             // 价钱未变
             product.sale_off_rate = lastProduct.sale_off_rate;
             product.sale_off_rate_date = lastProduct.sale_off_rate_date ;
         } else {
             // 价钱变了
-            double price = product.lister__item__price ;
-            double lastPrice = lastProduct.lister__item__price ;
+            double price = product.getPrice() ;
+            double lastPrice = lastProduct.getPrice() ;
             double rate = (price - lastPrice) / price ;
             product.sale_off_rate = (double)(long)(rate * 100) ;
             product.sale_off_rate_date = currentDate ;
