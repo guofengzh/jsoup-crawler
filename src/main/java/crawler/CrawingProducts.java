@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CrawingProducts {
-    public static final int totalPage = 1 ;
+    public static final int totalPage = 250 ;
     public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=120&sort=" ;
 
     Jspoon jspoon = Jspoon.create();
