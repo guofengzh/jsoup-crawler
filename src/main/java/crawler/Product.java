@@ -1,10 +1,13 @@
 package crawler;
 
-import com.univocity.parsers.annotations.NullString;
+import crawler.persistence.ListStringConverter;
 import pl.droidsonroids.jspoon.annotation.Selector;
 
+import javax.persistence.Convert;
+import javax.persistence.Entity;
 import java.util.List;
 
+@Entity
 public class Product {
     public static final String[] header =
             {"product_code", "title", "details", "price", "sizes", "product_Broken_Size", "product_url",
@@ -19,8 +22,8 @@ public class Product {
     @Selector(value=".productMainLink .lister__item__title")
     public String title ;
     /** product details */
-    @Selector(value=".productMainLink .lister__item__details")
-    public String lister__item__details ;
+    @Selector(value=".productMainLink .details")
+    public String details;
     /* product price - like $ 456 */
     @Selector(value=".productMainLink .lister__item__price-full")
     private String lister__item__price ;
@@ -32,6 +35,7 @@ public class Product {
     public List<String> sizes ;
     /** no stock size */
     @Selector(value=".sizes .noStock")
+    @Convert(converter = ListStringConverter.class)
     public List<String> noStockSize ;
     /** product url */
     @Selector(value=".productMainLink", attr = "href")
@@ -44,8 +48,10 @@ public class Product {
     /** 最新下架日期 */
     public String product_Soldout_Date;
     /** 断码码列表 */
+    @Convert(converter = ListStringConverter.class)
     public List<String> product_Broken_Size;
     /**最近一次发生的断码*/
+    @Convert(converter = ListStringConverter.class)
     public List<String> product_Last_Broken_Size;
     /**最近一次发生代码缺失变化的时间*/
     public String product_Broken_Size_Date;
@@ -54,6 +60,7 @@ public class Product {
     /** 价钱变化 的时间 */
     public String sale_off_rate_date ;
     /** 新补码的列表 */
+    @Convert(converter = ListStringConverter.class)
     public List<String> product_restock;
     /** 补码的时间 */
     public String product_restock_Date;
@@ -78,7 +85,7 @@ public class Product {
         return "Product{" +
                 "code='" + code + '\'' +
                 ", title='" + title + '\'' +
-                ", lister__item__details='" + lister__item__details + '\'' +
+                ", details='" + details + '\'' +
                 ", lister__item__price=" + lister__item__price +
                 ", lister__item__slug='" + lister__item__slug + '\'' +
                 ", sizes=" + sizes +

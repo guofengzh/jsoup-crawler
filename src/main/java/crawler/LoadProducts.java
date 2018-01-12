@@ -42,7 +42,7 @@ public class LoadProducts {
         Product product = new Product() ;
         product.code = row[0];
         product.title = row[1] ;
-        product.lister__item__details = row[2] ;
+        product.details = row[2] ;
         product.setLister__item__price(row[3]) ;
         product.sizes = toList(row[4]) ;
         product.product_Broken_Size = toList(row[5]) ;
