@@ -7,10 +7,10 @@ import java.util.List;
 
 public class Product {
     public static final String[] header =
-            {"product_code", "title", "details", "price", "sizes", "sizes_in_short", "product_url",
-             "on_off_shelf", "on_shelf_date", "off_shelf_date",
-              "sizes_in_short_last", "sizes_in_short_date",
-             "sale_off_rate", "sale_off_rate_date", "complements", "complements_date" } ;
+            {"product_code", "title", "details", "price", "sizes", "product_Broken_Size", "product_url",
+             "product_Live", "product_Live_Date", "product_Soldout_Date",
+              "product_Last_Broken_Size", "product_Broken_Size_Date",
+             "sale_off_rate", "sale_off_rate_date", "product_restock", "product_restock_Date" } ;
 
     /** product code */
     @Selector(value=".productMainLink", attr = "href", format = "(\\d+)")
@@ -38,25 +38,25 @@ public class Product {
     public String productUrl ;
     /* --------------- 分析结果 -------------------*/
     /* 架日期，下架日期，是否新品，降价幅度，断码，补码 */
-    public String on_off_shelf  = "" ; //是上架（true)，还是下架(false)
+    public String product_Live = "" ; //是上架（true)，还是下架(false)
     /** 最新上架日期 */
-    public String on_shelf_date ;
+    public String product_Live_Date;
     /** 最新下架日期 */
-    public String off_shelf_date ;
+    public String product_Soldout_Date;
     /** 断码码列表 */
-    public List<String> sizes_in_short ;
+    public List<String> product_Broken_Size;
     /**最近一次发生的断码*/
-    public List<String> sizes_in_short_last ;
+    public List<String> product_Last_Broken_Size;
     /**最近一次发生代码缺失变化的时间*/
-    public String sizes_in_short_date ;
+    public String product_Broken_Size_Date;
     /** 降价(-)或升价的(+)% */
     public Double sale_off_rate ;
     /** 价钱变化 的时间 */
     public String sale_off_rate_date ;
     /** 新补码的列表 */
-    public List<String> complements ;
+    public List<String> product_restock;
     /** 补码的时间 */
-    public String complement_date ;
+    public String product_restock_Date;
 
     public Product() {
     }

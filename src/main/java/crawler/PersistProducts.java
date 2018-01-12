@@ -1,21 +1,10 @@
 package crawler;
 
 import com.google.common.base.Joiner;
-import com.univocity.parsers.csv.CsvParser;
-import com.univocity.parsers.csv.CsvParserSettings;
 import com.univocity.parsers.tsv.TsvWriter;
 import com.univocity.parsers.tsv.TsvWriterSettings;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class PersistProducts {
@@ -33,17 +22,17 @@ public class PersistProducts {
                 writer.addValue(product.lister__item__details);
                 writer.addValue(product.getPrice());
                 writer.addValue(listToString(product.sizes)) ;
-                writer.addValue(listToString(product.sizes_in_short));
+                writer.addValue(listToString(product.product_Broken_Size));
                 writer.addValue(product.productUrl);
-                writer.addValue(product.on_off_shelf);
-                writer.addValue(product.on_shelf_date);
-                writer.addValue(product.off_shelf_date);
-                writer.addValue(listToString(product.sizes_in_short_last));
-                writer.addValue(product.sizes_in_short_date);
+                writer.addValue(product.product_Live);
+                writer.addValue(product.product_Live_Date);
+                writer.addValue(product.product_Soldout_Date);
+                writer.addValue(listToString(product.product_Last_Broken_Size));
+                writer.addValue(product.product_Broken_Size_Date);
                 writer.addValue(product.sale_off_rate);
                 writer.addValue(product.sale_off_rate_date) ;
-                writer.addValue(listToString(product.complements));
-                writer.addValue(product.complement_date);
+                writer.addValue(listToString(product.product_restock));
+                writer.addValue(product.product_restock_Date);
                 //flushes all values to the output, creating a row.
                 writer.writeValuesToRow();
             }

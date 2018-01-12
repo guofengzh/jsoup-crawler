@@ -23,14 +23,14 @@ public class Analysis {
            // 分析产品的上下架问题
             if (!lastProductMap.containsKey(product.code)) {
                 // 新品上架
-                product.on_off_shelf = "On Shelf" ;
-                product.on_shelf_date = currentDate ;
+                product.product_Live = "Live" ;
+                product.product_Live_Date = currentDate ;
                 newProductMap.put(product.code, product) ;
             } else {
                 // 已有的商品，保持上架状态
                 Product lastProduct = lastProductMap.get(product.code);
-                product.on_off_shelf = lastProduct.on_off_shelf ;
-                product.on_shelf_date = lastProduct.on_shelf_date ;
+                product.product_Live = lastProduct.product_Live;
+                product.product_Live_Date = lastProduct.product_Live_Date;
 
                 // 分析其它参数
                 analyzeProduct(product, lastProduct);
@@ -39,9 +39,9 @@ public class Analysis {
         for (Product lastProduct : lastProducts ) {
             if(!newProductMap.containsKey(lastProduct.code)) {
                 // 这次下架的商品
-                if ( lastProduct.on_off_shelf == null || !lastProduct.on_off_shelf.equals("Off Shelf")) {
-                    lastProduct.on_off_shelf = "Off Shelf" ;
-                    lastProduct.off_shelf_date = currentDate ;
+                if ( lastProduct.product_Live == null || !lastProduct.product_Live.equals("Soldout")) {
+                    lastProduct.product_Live = "Soldout" ;
+                    lastProduct.product_Soldout_Date = currentDate ;
                 }
                 newProducts.add(lastProduct) ;
             }
@@ -52,16 +52,16 @@ public class Analysis {
         // 最新上下架 - 不在这里分析
         // 断码列表有变化吗？
         Set<String> noStocks = new TreeSet<>(product.noStockSize) ;
-        Set<String> lastNoStack = new TreeSet<>(lastProduct.sizes_in_short) ;
+        Set<String> lastNoStack = new TreeSet<>(lastProduct.product_Broken_Size) ;
         noStocks.removeAll(lastNoStack) ;
         if (noStocks.isEmpty()) {
             // 没有变化
-            product.sizes_in_short_last = lastProduct.sizes_in_short_last ;
-            product.sizes_in_short_date = lastProduct.sizes_in_short_date ;
+            product.product_Last_Broken_Size = lastProduct.product_Last_Broken_Size;
+            product.product_Broken_Size_Date = lastProduct.product_Broken_Size_Date;
         } else {
             // 有变化
-            product.sizes_in_short_last = new ArrayList<>(noStocks) ;
-            product.sizes_in_short_date = currentDate ;
+            product.product_Last_Broken_Size = new ArrayList<>(noStocks) ;
+            product.product_Broken_Size_Date = currentDate ;
         }
 
         /** 降价(-)或升价的(+)% */
@@ -82,13 +82,13 @@ public class Analysis {
         Set<String> sizes = new TreeSet<>(product.sizes) ;
         Set<String> lastSizes = new TreeSet<>(lastProduct.sizes) ;
         sizes.removeAll(lastSizes) ;
-        product.complements = new ArrayList<>(sizes) ;
-        if (!product.complements.isEmpty()) { // 今天补码了
-            product.complement_date = currentDate ;
+        product.product_restock = new ArrayList<>(sizes) ;
+        if (!product.product_restock.isEmpty()) { // 今天补码了
+            product.product_restock_Date = currentDate ;
         } else {
             // 如果今天没有补码，则保持上次的时间
-            product.complements = lastProduct.complements ;
-            product.complement_date = lastProduct.complement_date ;
+            product.product_restock = lastProduct.product_restock;
+            product.product_restock_Date = lastProduct.product_restock_Date;
         }
     }
 }
