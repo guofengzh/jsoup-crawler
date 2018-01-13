@@ -65,7 +65,7 @@ public class CrawingProducts {
         String htmlBodyContent = response.body() ;
         Page page = htmlAdapter.fromHtml(htmlBodyContent);
 
-        // podst process
+        // post process
         for (Product product : page.products) {
             //logger.info(product.title+" lister__item__price:" + product.lister__item__price_full + " " + product.lister__item__price_down) ;
             if (!product.lister__item__price_down.equalsIgnoreCase("NO_VALUE")) {
