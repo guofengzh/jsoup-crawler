@@ -1,10 +1,9 @@
 package crawler;
 
+import crawler.persistence.Dao;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -23,7 +22,20 @@ public class DBTest {
         LoadProductsFromDb db = new LoadProductsFromDb() ;
         List<Product> products = db.load() ;
         Assert.assertEquals(products.size(), 1);
-        Assert.assertEquals(products, products);
+    }
+
+    @Test
+    public void dbLoadSave() {
+        Dao.deleteAllProducts();
+        PersistProductsToDb dbSave = new PersistProductsToDb() ;
+        List<Product> products = prepareProducts() ;
+        dbSave.persist(products) ;
+        LoadProductsFromDb dbLoad = new LoadProductsFromDb() ;
+        List<Product> saveProducts = dbLoad.load() ;
+        Assert.assertTrue(saveProducts.iterator().next().id != null);
+        dbSave.persist(saveProducts);
+        List<Product> pLast = dbLoad.load() ;
+        Assert.assertEquals(pLast.size(), 1);
     }
 
     private List<Product> prepareProducts() {
@@ -34,7 +46,7 @@ public class DBTest {
 
         product.title = "title1";
         product.details = "detail2";
-        product.lister__item__price  = "$ 1234";
+        product.lister__item__price_full  = "$ 1234";
         product.price  = 1234.5;
         product.sizes = Arrays.asList("12", "34", "56");
         product.noStockSize = Arrays.asList("99", "88");

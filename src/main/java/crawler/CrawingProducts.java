@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.*;
 
 public class CrawingProducts {
-    public static final int totalPage = 250 ;
+    public static final int TOTAL_PAGE = 250 ;
     public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=120&sort=" ;
 
     Jspoon jspoon = Jspoon.create();
@@ -20,13 +20,22 @@ public class CrawingProducts {
     final static Logger logger = LoggerFactory.getLogger(CrawingProducts.class);
 
     public List<Product> crawle() throws IOException {
+        String total  = System.getProperty("total") ;
+        int totalPage = TOTAL_PAGE ;
+        if ( total != null ) {
+            totalPage = Integer.parseInt(total) ;
+        }
+        logger.info("max page: " + totalPage) ;
+
         int i ;
         List<Product> allProducts = new ArrayList<>() ;
         for (i = 1 ; i <= totalPage ; i++ ) {
             try {
-                System.out.println("Crawling page " + i);
                 long t = System.currentTimeMillis() % 5 ;
-                Thread.sleep(  (5 + t ) * 1000 ) ; // random stop sometime
+                long w = (5 + t ) * 1000 ;
+                System.out.println("Crawling page " + i + ", first waiting " + w);
+                Thread.sleep( w ) ; // random stop sometime
+                System.out.println("Starting Crawling page " + i );
             } catch (InterruptedException e) {
                 System.out.println("Page " + i) ;
                 e.printStackTrace();
@@ -58,7 +67,15 @@ public class CrawingProducts {
 
         // podst process
         for (Product product : page.products) {
-            product.price = Utils.toDouble(product.lister__item__price) ;
+            //logger.info(product.title+" lister__item__price:" + product.lister__item__price_full + " " + product.lister__item__price_down) ;
+            if (!product.lister__item__price_down.equalsIgnoreCase("NO_VALUE")) {
+                product.price = Utils.toDouble(product.lister__item__price_down);
+            } else if (!product.lister__item__price_full.equalsIgnoreCase("NO_VALUE")) {
+                product.price = Utils.toDouble(product.lister__item__price_full);
+            } else {
+                logger.info("No price crawled bor " + product.title) ;
+            }
+
             product.product_Broken_Size = product.noStockSize ;
         }
         return page.products ;

@@ -26,6 +26,7 @@ public class Analysis {
             } else {
                 // 已有的商品，保持上架状态
                 Product lastProduct = lastProductMap.get(product.code);
+                product.id = lastProduct.id ;
                 product.product_Live = lastProduct.product_Live;
                 product.product_Live_Date = lastProduct.product_Live_Date;
 

@@ -3,15 +3,14 @@ package crawler;
 import crawler.persistence.ListStringConverter;
 import org.hibernate.annotations.AccessType;
 import org.hibernate.annotations.AttributeAccessor;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Table;
 import pl.droidsonroids.jspoon.annotation.Selector;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @AttributeAccessor("field")
@@ -22,9 +21,14 @@ public class Product {
               "product_Last_Broken_Size", "product_Broken_Size_Date",
              "sale_off_rate", "sale_off_rate_date", "product_restock", "product_restock_Date" } ;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
+    @Column(name = "id", updatable = false, nullable = false)
+    public Long id;
+
     /** product code */
     @Selector(value=".productMainLink", attr = "href", format = "(\\d+)")
-    @Id
     public String code ;
     /** product ttile */
     @Selector(value=".productMainLink .lister__item__title")
@@ -34,7 +38,11 @@ public class Product {
     public String details;
     /* product price - string like $ 456 */
     @Selector(value=".productMainLink .lister__item__price-full")
-    public transient String lister__item__price ;
+    public transient String lister__item__price_full ;
+    @Selector(value=".productMainLink .lister__item__price-down")
+    public transient String lister__item__price_down ;
+    @Selector(value=".productMainLink .lister__item__price strike")
+    public transient String strike_price ;
     /* product price */
     public double price ;
     /** Runaway */
@@ -82,14 +90,27 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "code='" + code + '\'' +
+                "id=" + id +
+                ", code='" + code + '\'' +
                 ", title='" + title + '\'' +
                 ", details='" + details + '\'' +
-                ", lister__item__price=" + lister__item__price +
-//                ", lister__item__slug='" + lister__item__slug + '\'' +
+                ", lister__item__price_full='" + lister__item__price_full + '\'' +
+                ", lister__item__price_down='" + lister__item__price_down + '\'' +
+                ", strike_price='" + strike_price + '\'' +
+                ", price=" + price +
                 ", sizes=" + sizes +
                 ", noStockSize=" + noStockSize +
                 ", productUrl='" + productUrl + '\'' +
+                ", product_Live='" + product_Live + '\'' +
+                ", product_Live_Date=" + product_Live_Date +
+                ", product_Soldout_Date=" + product_Soldout_Date +
+                ", product_Broken_Size=" + product_Broken_Size +
+                ", product_Last_Broken_Size=" + product_Last_Broken_Size +
+                ", product_Broken_Size_Date=" + product_Broken_Size_Date +
+                ", sale_off_rate=" + sale_off_rate +
+                ", sale_off_rate_date=" + sale_off_rate_date +
+                ", product_restock=" + product_restock +
+                ", product_restock_Date=" + product_restock_Date +
                 '}';
     }
 }

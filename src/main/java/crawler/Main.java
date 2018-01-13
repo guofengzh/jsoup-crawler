@@ -1,5 +1,6 @@
 package crawler;
 
+import crawler.persistence.Dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,8 @@ public class Main {
             new Main().runDb() ;
         } catch (Throwable t ) {
             logger.error(t.getMessage(), t);
+        } finally {
+            Dao.closeSessionFactory();
         }
     }
 

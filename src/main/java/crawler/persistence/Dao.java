@@ -17,7 +17,11 @@ public class Dao {
             // must be located in one transaction.
             // Start Transaction.
             session.getTransaction().begin();
-            session.saveOrUpdate(product); ;
+            if (product.id == null ) {
+                session.save(product);
+            } else {
+                session.update(product);
+            }
             // Commit data.
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -33,7 +37,7 @@ public class Dao {
 
         try {
             session.getTransaction().begin();
-            String sql = "Select e from " + Product.class.getName() + " e" ;
+            String sql = "select e from " + Product.class.getName() + " e" ;
 
             // Create Query object.
             Query<Product> query = session.createQuery(sql);
@@ -50,4 +54,29 @@ public class Dao {
         }
     }
 
+    public static void deleteAllProducts() {
+        SessionFactory factory = HibernateUtils.getSessionFactory();
+        Session session = factory.getCurrentSession();
+
+        try {
+            session.getTransaction().begin();
+            String sql = "delete from " + Product.class.getName()  ;
+
+            // Create Query object.
+            Query<Product> query = session.createQuery(sql);
+            query.executeUpdate();
+
+            // Commit data.
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            // Rollback in case of an error occurred.
+            session.getTransaction().rollback();
+            throw e ;
+        }
+    }
+
+    public static void closeSessionFactory() {
+        SessionFactory factory = HibernateUtils.getSessionFactory();
+        factory.close();
+    }
 }

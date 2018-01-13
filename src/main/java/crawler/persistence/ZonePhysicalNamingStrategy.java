@@ -1,16 +1,15 @@
 package crawler.persistence;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Locale;
 
 public class ZonePhysicalNamingStrategy implements PhysicalNamingStrategy {
+    final static Logger logger = LoggerFactory.getLogger(ZonePhysicalNamingStrategy.class);
 
     @Override
     public Identifier toPhysicalCatalogName(Identifier name, JdbcEnvironment jdbcEnvironment) {
@@ -24,6 +23,8 @@ public class ZonePhysicalNamingStrategy implements PhysicalNamingStrategy {
 
     @Override
     public Identifier toPhysicalTableName(Identifier name, JdbcEnvironment jdbcEnvironment) {
+        Locale locale = Locale.getDefault() ;
+        logger.info("Conutry:" + locale.getCountry());
         Identifier identifier = Identifier.toIdentifier("crawler_data") ;
         return identifier;
     }
