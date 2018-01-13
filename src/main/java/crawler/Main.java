@@ -23,10 +23,29 @@ public class Main {
 
     public static void main(String[] args ) {
         try {
-            new Main().run() ;
+            new Main().runDb() ;
         } catch (Throwable t ) {
             logger.error(t.getMessage(), t);
         }
+    }
+
+    private void runDb() throws Exception {
+        // load last crawled products
+        LoadProductsFromDb db = new LoadProductsFromDb() ;
+        List<Product> lastProducts = db.load() ;
+
+        // crawling
+        CrawingProducts crawingProducts = new CrawingProducts() ;
+        List<Product> products = crawingProducts.crawle() ;
+
+        if (!lastProducts.isEmpty()) {
+            // analysis
+            logger.info("analysis data");
+            new Analysis().analyze(products, lastProducts) ;
+        }
+
+        PersistProductsToDb dbTo = new PersistProductsToDb() ;
+        dbTo.persist(products);
     }
 
     private void run() throws Exception {

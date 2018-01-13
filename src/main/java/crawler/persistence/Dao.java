@@ -17,7 +17,7 @@ public class Dao {
             // must be located in one transaction.
             // Start Transaction.
             session.getTransaction().begin();
-            session.save(product) ;
+            session.saveOrUpdate(product); ;
             // Commit data.
             session.getTransaction().commit();
         } catch (Exception e) {
