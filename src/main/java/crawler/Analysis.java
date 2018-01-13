@@ -1,13 +1,9 @@
 package crawler;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Analysis {
     private final static Locale CUSTOM_DEFAULT_LOCALE = Locale.US;
-    private final static DateFormat fullDateFormat = new SimpleDateFormat("yyyy.MM.dd", CUSTOM_DEFAULT_LOCALE);
-    private final static String currentDate = fullDateFormat.format(new Date()) ;
 
     public void analyze(List<Product> newProducts, List<Product> lastProducts) {
         HashMap<String, Product> newProductMap = new HashMap<>() ;
@@ -19,6 +15,7 @@ public class Analysis {
             lastProductMap.put(product.code, product) ;
         }
 
+        Date currentDate = new Date() ;
         for(Product product : newProducts ) {
            // 分析产品的上下架问题
             if (!lastProductMap.containsKey(product.code)) {
@@ -61,21 +58,21 @@ public class Analysis {
         } else {
             // 有变化
             product.product_Last_Broken_Size = new ArrayList<>(noStocks) ;
-            product.product_Broken_Size_Date = currentDate ;
+            product.product_Broken_Size_Date = new Date() ;
         }
 
         /** 降价(-)或升价的(+)% */
-        if (product.getPrice().equals(lastProduct.getPrice())) {
+        if (product.price == lastProduct.price) {
             // 价钱未变
             product.sale_off_rate = lastProduct.sale_off_rate;
             product.sale_off_rate_date = lastProduct.sale_off_rate_date ;
         } else {
             // 价钱变了
-            double price = product.getPrice() ;
-            double lastPrice = lastProduct.getPrice() ;
+            double price = product.price ;
+            double lastPrice = lastProduct.price ;
             double rate = (price - lastPrice) / price ;
             product.sale_off_rate = (double)(long)(rate * 100) ;
-            product.sale_off_rate_date = currentDate ;
+            product.sale_off_rate_date = new Date() ;
         }
 
         /** 新补码的列表 */
@@ -84,7 +81,7 @@ public class Analysis {
         sizes.removeAll(lastSizes) ;
         product.product_restock = new ArrayList<>(sizes) ;
         if (!product.product_restock.isEmpty()) { // 今天补码了
-            product.product_restock_Date = currentDate ;
+            product.product_restock_Date = new Date() ;
         } else {
             // 如果今天没有补码，则保持上次的时间
             product.product_restock = lastProduct.product_restock;

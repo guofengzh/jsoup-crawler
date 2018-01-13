@@ -24,7 +24,8 @@ public class ZonePhysicalNamingStrategy implements PhysicalNamingStrategy {
 
     @Override
     public Identifier toPhysicalTableName(Identifier name, JdbcEnvironment jdbcEnvironment) {
-        return name;
+        Identifier identifier = Identifier.toIdentifier("crawler_data") ;
+        return identifier;
     }
 
     @Override

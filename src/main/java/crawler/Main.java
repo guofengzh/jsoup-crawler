@@ -29,7 +29,7 @@ public class Main {
         }
     }
 
-    private void run() throws IOException {
+    private void run() throws Exception {
         File f = new File("matchesfashion.csv") ;
 
         // load last crawled products

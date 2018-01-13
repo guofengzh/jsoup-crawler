@@ -2,16 +2,12 @@ package crawler;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.droidsonroids.jspoon.HtmlAdapter;
 import pl.droidsonroids.jspoon.Jspoon;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CrawingProducts {
@@ -60,6 +56,11 @@ public class CrawingProducts {
         String htmlBodyContent = response.body() ;
         Page page = htmlAdapter.fromHtml(htmlBodyContent);
 
+        // podst process
+        for (Product product : page.products) {
+            product.price = Utils.toDouble(product.lister__item__price) ;
+            product.product_Broken_Size = product.noStockSize ;
+        }
         return page.products ;
     }
 }

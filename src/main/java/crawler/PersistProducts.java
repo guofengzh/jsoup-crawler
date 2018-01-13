@@ -20,7 +20,7 @@ public class PersistProducts {
                 writer.addValue(product.code);
                 writer.addValue(product.title);
                 writer.addValue(product.details);
-                writer.addValue(product.getPrice());
+                writer.addValue(product.price);
                 writer.addValue(listToString(product.sizes)) ;
                 writer.addValue(listToString(product.product_Broken_Size));
                 writer.addValue(product.productUrl);

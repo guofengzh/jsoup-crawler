@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PersistProductsToDb {
 
-    public void persist(List<Product> products, File file) throws IOException {
+    public void persist(List<Product> products) {
         for (Product product : products) {
             Dao.save(product);
         }

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class LoadProductsFromDb {
 
-    public List<Product> load(File file) throws IOException {
+    public List<Product> load() {
         return Dao.loadAll();
     }
 }

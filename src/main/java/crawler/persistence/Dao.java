@@ -33,7 +33,7 @@ public class Dao {
 
         try {
             session.getTransaction().begin();
-            String sql = "Select e from " + Product.class.getName() ;
+            String sql = "Select e from " + Product.class.getName() + " e" ;
 
             // Create Query object.
             Query<Product> query = session.createQuery(sql);

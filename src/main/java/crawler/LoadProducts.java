@@ -4,11 +4,12 @@ import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 
 import java.io.*;
+import java.text.ParseException;
 import java.util.*;
 
 public class LoadProducts {
 
-    public List<Product> load(File file) throws IOException {
+    public List<Product> load(File file) throws Exception {
         CsvParserSettings settings = new CsvParserSettings();
         //the file used in the example uses '\n' as the line separator sequence.
         //the line separator sequence is defined here to ensure systems such as MacOS and Windows
@@ -38,24 +39,24 @@ public class LoadProducts {
         return allProducts ;
     }
 
-    private Product parseOneRow(String[] row) {
+    private Product parseOneRow(String[] row) throws ParseException {
         Product product = new Product() ;
         product.code = row[0];
         product.title = row[1] ;
         product.details = row[2] ;
-        product.setLister__item__price(row[3]) ;
+        product.price = Utils.toDouble(row[3]) ;
         product.sizes = toList(row[4]) ;
         product.product_Broken_Size = toList(row[5]) ;
         product.productUrl = row[6] ;
         product.product_Live = row[7] ;
-        product.product_Live_Date = row[8];
-        product.product_Soldout_Date = row[9];
+        product.product_Live_Date = Utils.dateFrom(row[8]);
+        product.product_Soldout_Date = Utils.dateFrom(row[9]);
         product.product_Last_Broken_Size = toList(row[10]) ;
-        product.product_Broken_Size_Date = row[11] ;
+        product.product_Broken_Size_Date = Utils.dateFrom(row[11]) ;
         product.sale_off_rate = row[12] != null && !row[12].isEmpty()?Double.parseDouble(row[12]):null;
-        product.sale_off_rate_date = row[13] ;
+        product.sale_off_rate_date =Utils.dateFrom( row[13]) ;
         product.product_restock = toList(row[14]) ;
-        product.product_restock_Date = row[15] ;
+        product.product_restock_Date = Utils.dateFrom(row[15]) ;
         return product ;
     }
 
