@@ -6,8 +6,6 @@ import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Locale;
-
 public class ZonePhysicalNamingStrategy implements PhysicalNamingStrategy {
     final static Logger logger = LoggerFactory.getLogger(ZonePhysicalNamingStrategy.class);
 
@@ -23,9 +21,7 @@ public class ZonePhysicalNamingStrategy implements PhysicalNamingStrategy {
 
     @Override
     public Identifier toPhysicalTableName(Identifier name, JdbcEnvironment jdbcEnvironment) {
-        Locale locale = Locale.getDefault() ;
-        logger.info("Conutry:" + locale.getCountry());
-        Identifier identifier = Identifier.toIdentifier("crawler_data") ;
+        Identifier identifier = Identifier.toIdentifier(TableNameUtils.getTableName()) ;
         return identifier;
     }
 

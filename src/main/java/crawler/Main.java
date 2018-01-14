@@ -1,11 +1,11 @@
 package crawler;
 
-import crawler.persistence.Dao;
+import crawler.persistence.ProductDao;
+import crawler.persistence.TableNameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,18 +24,29 @@ public class Main {
 
     public static void main(String[] args ) {
         try {
+            if (args.length != 1 ) {
+                System.out.println("Usage: java -jar jafile.jar tablename" ) ;
+                System.exit(-1);
+            }
+            TableNameUtils.setTableName(args[0]);
             new Main().runDb() ;
         } catch (Throwable t ) {
             logger.error(t.getMessage(), t);
+            System.exit(-1);
         } finally {
-            Dao.closeSessionFactory();
+            ProductDao.closeSessionFactory();
         }
+        System.exit(0);
     }
 
+    /**
+     * store/load data from db
+     *
+     * @throws Exception
+     */
     private void runDb() throws Exception {
         // load last crawled products
-        LoadProductsFromDb db = new LoadProductsFromDb() ;
-        List<Product> lastProducts = db.load() ;
+        List<Product> lastProducts =ProductDao.loadAll() ;
 
         // crawling
         CrawingProducts crawingProducts = new CrawingProducts() ;
@@ -47,8 +58,7 @@ public class Main {
             new Analysis().analyze(products, lastProducts) ;
         }
 
-        PersistProductsToDb dbTo = new PersistProductsToDb() ;
-        dbTo.persist(products);
+        ProductDao.save(products);
     }
 
     private void run() throws Exception {

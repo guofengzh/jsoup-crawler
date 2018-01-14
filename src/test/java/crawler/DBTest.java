@@ -1,7 +1,8 @@
 package crawler;
 
-import crawler.persistence.Dao;
+import crawler.persistence.ProductDao;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,30 +12,29 @@ import java.util.List;
 
 public class DBTest {
     @Test
+    @Ignore
     public void dbSave() {
-        PersistProductsToDb db = new PersistProductsToDb() ;
         List<Product> products = prepareProducts() ;
-        db.persist(products);
+        ProductDao.save(products);
     }
 
     @Test
+    @Ignore
     public void dbLoad() {
-        LoadProductsFromDb db = new LoadProductsFromDb() ;
-        List<Product> products = db.load() ;
+        List<Product> products = ProductDao.loadAll() ;
         Assert.assertEquals(products.size(), 1);
     }
 
     @Test
+    @Ignore
     public void dbLoadSave() {
-        Dao.deleteAllProducts();
-        PersistProductsToDb dbSave = new PersistProductsToDb() ;
+        ProductDao.deleteAllProducts();
         List<Product> products = prepareProducts() ;
-        dbSave.persist(products) ;
-        LoadProductsFromDb dbLoad = new LoadProductsFromDb() ;
-        List<Product> saveProducts = dbLoad.load() ;
+        ProductDao.save(products); ;
+        List<Product> saveProducts = ProductDao.loadAll() ;
         Assert.assertTrue(saveProducts.iterator().next().id != null);
-        dbSave.persist(saveProducts);
-        List<Product> pLast = dbLoad.load() ;
+        ProductDao.save(saveProducts);
+        List<Product> pLast = ProductDao.loadAll() ;
         Assert.assertEquals(pLast.size(), 1);
     }
 

@@ -8,7 +8,7 @@ import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtils {
 
-    private static final SessionFactory sessionFactory = buildSessionFactory();
+    private static SessionFactory sessionFactory ;
 
     // Hibernate 5:
     private static SessionFactory buildSessionFactory() {
@@ -28,7 +28,10 @@ public class HibernateUtils {
         }
     }
 
-    public static SessionFactory getSessionFactory() {
+    public static synchronized SessionFactory getSessionFactory() {
+        if ( sessionFactory == null ) {
+            sessionFactory = buildSessionFactory();
+        }
         return sessionFactory;
     }
 

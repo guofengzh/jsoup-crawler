@@ -7,7 +7,12 @@ import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class Dao {
+public class ProductDao {
+    public static void save(List<Product> products) {
+        for (Product product : products) {
+            save(product);
+        }
+    }
     public static void save(Product product) {
         SessionFactory factory = HibernateUtils.getSessionFactory();
         Session session = factory.getCurrentSession();
