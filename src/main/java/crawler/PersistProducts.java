@@ -1,6 +1,8 @@
 package crawler;
 
 import com.google.common.base.Joiner;
+import com.univocity.parsers.csv.CsvWriter;
+import com.univocity.parsers.csv.CsvWriterSettings;
 import com.univocity.parsers.tsv.TsvWriter;
 import com.univocity.parsers.tsv.TsvWriterSettings;
 
@@ -9,12 +11,14 @@ import java.util.List;
 
 public class PersistProducts {
 
-    public void persist(List<Product> products, File file) throws IOException {
+    public void persist(List<Product> products, File file) throws Exception {
         try(
                 OutputStream outputStream = new FileOutputStream(file);
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8"))
         {
-            TsvWriter writer = new TsvWriter(outputStreamWriter, new TsvWriterSettings()) ;
+            CsvWriterSettings settings = new CsvWriterSettings() ;
+            CsvWriter writer = new CsvWriter(outputStreamWriter, settings) ;
+            settings.getFormat().setLineSeparator("\n");
             writer.writeHeaders(Product.header);
             for(Product product : products) {
                 writer.addValue(product.code);
@@ -25,14 +29,14 @@ public class PersistProducts {
                 writer.addValue(listToString(product.product_Broken_Size));
                 writer.addValue(product.productUrl);
                 writer.addValue(product.product_Live);
-                writer.addValue(product.product_Live_Date);
-                writer.addValue(product.product_Soldout_Date);
+                writer.addValue(Utils.toDateString(product.product_Live_Date));
+                writer.addValue(Utils.toDateString(product.product_Soldout_Date));
                 writer.addValue(listToString(product.product_Last_Broken_Size));
-                writer.addValue(product.product_Broken_Size_Date);
+                writer.addValue(Utils.toDateString(product.product_Broken_Size_Date));
                 writer.addValue(product.sale_off_rate);
-                writer.addValue(product.sale_off_rate_date) ;
+                writer.addValue(Utils.toDateString(product.sale_off_rate_date)) ;
                 writer.addValue(listToString(product.product_restock));
-                writer.addValue(product.product_restock_Date);
+                writer.addValue(Utils.toDateString(product.product_restock_Date));
                 //flushes all values to the output, creating a row.
                 writer.writeValuesToRow();
             }

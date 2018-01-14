@@ -15,7 +15,7 @@ public class LoadProducts {
         //the line separator sequence is defined here to ensure systems such as MacOS and Windows
         //are able to process this file correctly (MacOS uses '\r'; and Windows uses '\r\n').
         settings.getFormat().setLineSeparator("\n");
-        settings.getFormat().setDelimiter('\t');
+        settings.getFormat().setDelimiter(',');
 
         // creates a CSV parser
         CsvParser parser = new CsvParser(settings);

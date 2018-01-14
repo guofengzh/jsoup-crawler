@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Utils {
-    private final static DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
+    private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     public static Double toDouble(String s) {
         if (!Character.isDigit(s.charAt(0)))
             s = s.substring(1) ;

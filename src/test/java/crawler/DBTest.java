@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -63,5 +65,20 @@ public class DBTest {
         product.product_restock_Date = new Date();
         products.add(product) ;
         return products ;
+    }
+
+    @Test
+    @Ignore
+    public void saveInCsv() throws Exception {
+        List<Product> products = prepareProducts() ;
+        new PersistProducts().persist(products, new File("./test.csv"));
+    }
+
+    @Test
+    @Ignore
+    public void loadFromCsv() throws Exception {
+        List<Product> products = new LoadProducts().load(new File("./test.csv")) ;
+        Product product = products.iterator().next() ;
+        Assert.assertEquals(product.details,"detail2" );
     }
 }
