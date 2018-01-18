@@ -29,7 +29,7 @@
         <property name="hibernate.physical_naming_strategy">crawler.persistence.ZonePhysicalNamingStrategy</property>
 
         <mapping class="crawler.Product" />
-        
+
         <!--mapping class="org.o7planning.tutorial.hibernate.entities.Employee" />
         <mapping class="org.o7planning.tutorial.hibernate.entities.SalaryGrade" />
         <mapping class="org.o7planning.tutorial.hibernate.entities.Timekeeper" /-->
