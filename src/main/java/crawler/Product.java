@@ -34,7 +34,7 @@ public class Product {
     @Selector(value=".productMainLink .lister__item__title")
     public String title ;
     /** product details */
-    @Selector(value=".productMainLink .details")
+    @Selector(value=".productMainLink .lister__item__details")
     public String details;
     /* product price - string like $ 456 */
     @Selector(value=".productMainLink .lister__item__price-full")

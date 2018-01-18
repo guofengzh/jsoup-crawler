@@ -10,12 +10,18 @@ public class HibernateUtils {
 
     private static SessionFactory sessionFactory ;
 
+    private static String hibernate_config_file = "hibernate.cfg.xml" ;
+
+    public static void setHibernateConfigFile(String cf) {
+        hibernate_config_file = cf ;
+    }
+
     // Hibernate 5:
     private static SessionFactory buildSessionFactory() {
         try {
             // Create the ServiceRegistry from hibernate.cfg.xml
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()//
-                    .configure("hibernate.cfg.xml").build();
+                    .configure(hibernate_config_file).build();
 
             // Create a metadata sources using the specified service registry.
             Metadata metadata = new MetadataSources(serviceRegistry).getMetadataBuilder().build();

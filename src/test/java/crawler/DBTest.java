@@ -1,5 +1,6 @@
 package crawler;
 
+import crawler.persistence.HibernateUtils;
 import crawler.persistence.ProductDao;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -16,6 +17,7 @@ public class DBTest {
     @Test
     @Ignore
     public void dbSave() {
+        HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
         List<Product> products = prepareProducts() ;
         ProductDao.save(products);
     }
@@ -23,6 +25,7 @@ public class DBTest {
     @Test
     @Ignore
     public void dbLoad() {
+        HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
         List<Product> products = ProductDao.loadAll() ;
         Assert.assertEquals(products.size(), 1);
     }
@@ -30,6 +33,7 @@ public class DBTest {
     @Test
     @Ignore
     public void dbLoadSave() {
+        HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
         ProductDao.deleteAllProducts();
         List<Product> products = prepareProducts() ;
         ProductDao.save(products); ;
