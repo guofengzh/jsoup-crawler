@@ -24,12 +24,14 @@ public class Main {
 
     public static void main(String[] args ) {
         try {
+            logger.info("Starting crawling products") ;
             if (args.length != 1 ) {
                 System.out.println("Usage: java -jar jafile.jar tablename" ) ;
                 System.exit(-1);
             }
             TableNameUtils.setTableName(args[0]);
             new Main().runDb() ;
+            logger.info("Starting crawling products - Done") ;
         } catch (Throwable t ) {
             logger.error(t.getMessage(), t);
             System.exit(-1);
