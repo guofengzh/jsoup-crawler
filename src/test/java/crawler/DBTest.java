@@ -2,6 +2,7 @@ package crawler;
 
 import crawler.persistence.HibernateUtils;
 import crawler.persistence.ProductDao;
+import crawler.persistence.TableNameUtils;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,24 +17,19 @@ import java.util.List;
 public class DBTest {
     @Test
     @Ignore
-    public void dbSave() {
-        HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
-        List<Product> products = prepareProducts() ;
-        ProductDao.save(products);
-    }
-
-    @Test
-    @Ignore
     public void dbLoad() {
         HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
+        TableNameUtils.setTableName("crawler_data_cn");
         List<Product> products = ProductDao.loadAll() ;
         Assert.assertEquals(products.size(), 1);
+        HibernateUtils.shutdown();
     }
 
     @Test
     @Ignore
     public void dbLoadSave() {
         HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
+        TableNameUtils.setTableName("crawler_data_cn");
         ProductDao.deleteAllProducts();
         List<Product> products = prepareProducts() ;
         ProductDao.save(products); ;
@@ -42,6 +38,17 @@ public class DBTest {
         ProductDao.save(saveProducts);
         List<Product> pLast = ProductDao.loadAll() ;
         Assert.assertEquals(pLast.size(), 1);
+        HibernateUtils.shutdown();
+    }
+
+    @Test
+    @Ignore
+    public void dbSave() {
+        HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
+        TableNameUtils.setTableName("crawler_data_cn");
+        List<Product> products = prepareProducts() ;
+        ProductDao.save(products);
+        HibernateUtils.shutdown();
     }
 
     private List<Product> prepareProducts() {
@@ -63,7 +70,7 @@ public class DBTest {
         product.product_Broken_Size = Arrays.asList("97", "88");
         product.product_Last_Broken_Size = Arrays.asList("97");
         product.product_Broken_Size_Date = new Date();
-        product.sale_off_rate = 25.0 ;
+        product.sale_off_rate = 1025.333 ;
         product.sale_off_rate_date  = new Date();
         product.product_restock = Arrays.asList("56");
         product.product_restock_Date = new Date();
