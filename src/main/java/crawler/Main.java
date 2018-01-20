@@ -56,7 +56,6 @@ public class Main {
 
         if (!lastProducts.isEmpty()) {
             // analysis
-            logger.info("analysis data");
             new Analysis().analyze(products, lastProducts) ;
         }
 

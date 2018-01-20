@@ -37,8 +37,7 @@ public class CrawingProducts {
                 Thread.sleep( w ) ; // random stop sometime
                 System.out.println("Starting Crawling page " + i );
             } catch (InterruptedException e) {
-                System.out.println("Page " + i) ;
-                e.printStackTrace();
+                logger.error("Page " + i, e) ;
             }
 
             List<Product> products = getPage(i);
@@ -59,7 +58,7 @@ public class CrawingProducts {
                 .execute();
         int statusCode = response.statusCode();
         if ( statusCode != 200 ) {
-            System.out.println("Status Code: " + statusCode + " at page " + i) ;
+            logger.error("Status Code: " + statusCode + " at page " + i); ;
             return new ArrayList<>() ;
         }
         String htmlBodyContent = response.body() ;
@@ -67,6 +66,7 @@ public class CrawingProducts {
 
         // post process
         for (Product product : page.products) {
+//            System.out.println(product) ;
             //logger.info(product.title+" lister__item__price:" + product.lister__item__price_full + " " + product.lister__item__price_down) ;
             if (!product.lister__item__price_down.equalsIgnoreCase("NO_VALUE")) {
                 product.price = Utils.toDouble(product.lister__item__price_down);

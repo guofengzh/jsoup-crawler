@@ -1,11 +1,17 @@
 package crawler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 public class Analysis {
     private final static Locale CUSTOM_DEFAULT_LOCALE = Locale.US;
 
+    final static Logger logger = LoggerFactory.getLogger(Main.class);
+
     public void analyze(List<Product> newProducts, List<Product> lastProducts) {
+        logger.info("analysis data");
         HashMap<String, Product> newProductMap = new HashMap<>() ;
         for (Product product: newProducts ) {
             newProductMap.put(product.code, product) ;
