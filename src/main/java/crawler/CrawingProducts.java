@@ -66,7 +66,7 @@ public class CrawingProducts {
 
         // post process
         for (Product product : page.products) {
-//            System.out.println(product) ;
+            product.code = product.code.trim() ;
             //logger.info(product.title+" lister__item__price:" + product.lister__item__price_full + " " + product.lister__item__price_down) ;
             if (!product.lister__item__price_down.equalsIgnoreCase("NO_VALUE")) {
                 product.price = Utils.toDouble(product.lister__item__price_down);

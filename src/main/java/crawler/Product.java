@@ -28,7 +28,7 @@ public class Product {
     public Long id;
 
     /** product code */
-    @Selector(value=".productMainLink", attr = "href", format = "(\\d+)")
+    @Selector(value=".productMainLink", attr = "href", format = "(\\d+)$")
     public String code ;
     /** product ttile */
     @Selector(value=".productMainLink .lister__item__title")
