@@ -79,6 +79,7 @@ public class Analysis {
             double lastPrice = lastProduct.price ;
             double rate = (price - lastPrice) / price ;
             product.sale_off_rate = (double)(long)(rate * 100) ;
+            product.last_price = lastPrice ;
             product.sale_off_rate_date = new Date() ;
         }
 

@@ -71,6 +71,7 @@ public class DBTest {
         product.product_Last_Broken_Size = Arrays.asList("97");
         product.product_Broken_Size_Date = new Date();
         product.sale_off_rate = 1025.333 ;
+        product.last_price = 1000.0 ;
         product.sale_off_rate_date  = new Date();
         product.product_restock = Arrays.asList("56");
         product.product_restock_Date = new Date();

@@ -76,6 +76,8 @@ public class Product {
     public Date product_Broken_Size_Date;
     /** 降价(-)或升价的(+)% */
     public Double sale_off_rate ;
+    /** 上次的价格 */
+    public Double last_price ;
     /** 价钱变化 的时间 */
     public Date sale_off_rate_date ;
     /** 新补码的列表 */
