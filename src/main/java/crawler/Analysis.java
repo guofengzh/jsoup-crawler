@@ -72,6 +72,7 @@ public class Analysis {
         if (product.price == lastProduct.price) {
             // 价钱未变
             product.sale_off_rate = lastProduct.sale_off_rate;
+            product.last_price = lastProduct.last_price ;
             product.sale_off_rate_date = lastProduct.sale_off_rate_date ;
         } else {
             // 价钱变了
