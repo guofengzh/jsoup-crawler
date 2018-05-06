@@ -1,13 +1,13 @@
 package crawler.persistence;
 
 public class TableNameUtils {
-    public static String getTableName() {
-        return tableName;
+    public static String getTableNamePostfix() {
+        return tableNamePostfix;
     }
 
-    public static void setTableName(String tableName) {
-        TableNameUtils.tableName = tableName;
+    public static void setTableNamePostfix(String postfix) {
+        TableNameUtils.tableNamePostfix = postfix;
     }
 
-    static String tableName = "" ;
+    static String tableNamePostfix = "" ;
 }

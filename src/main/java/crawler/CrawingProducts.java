@@ -12,6 +12,7 @@ import java.util.*;
 
 public class CrawingProducts {
     public static final int TOTAL_PAGE = 250 ;
+    public static final String base_url = "https://www.matchesfashion.com" ;
     public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=120&sort=" ;
 
     Jspoon jspoon = Jspoon.create();
@@ -26,8 +27,11 @@ public class CrawingProducts {
         if ( total != null ) {
             totalPage = Integer.parseInt(total) ;
         }
-        logger.info("max page: " + totalPage) ;
+        return crawle(totalPage) ;
+    }
 
+    public List<Product> crawle(int totalPage) throws IOException {
+        logger.info("max page: " + totalPage) ;
         int i ;
         List<Product> allProducts = new ArrayList<>() ;
         for (i = 1 ; i <= totalPage ; i++ ) {
@@ -45,6 +49,20 @@ public class CrawingProducts {
             if ( products.isEmpty())
                 break ;
             allProducts.addAll(products) ;
+
+            for (Product product : products) {
+                String pageDetailUrl = base_url + product.detailPageUrl ;
+                long t = System.currentTimeMillis() % 5 ;
+                long w = (5 + t ) * 1000 ;
+                try {
+                    Thread.sleep( w ) ;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                List<String> brands = getPageDetail(pageDetailUrl) ;
+                if (!brands.isEmpty())
+                product.brands = brands.subList(1, brands.size()) ;
+            }
         }
         logger.info("Total products " + allProducts.size() + " on " + (i-1) + " pages"); ;
         return allProducts;

@@ -12,9 +12,10 @@ CREATE TABLE crawler_data_cn (
     id   bigint(32) NOT NULL AUTO_INCREMENT,
     code VARCHAR(30) COMMENT '',
     title      VARCHAR(255),
-    details    VARCHAR(30),
+    details    VARCHAR(255),
     price      decimal(10,2),
     sizes      VARCHAR(255),
+    brands     VARCHAR(30),
     product_url VARCHAR(255),
     Product_Live VARCHAR(30),
     Product_Live_Date Date,
@@ -23,6 +24,7 @@ CREATE TABLE crawler_data_cn (
     Product_Last_Broken_Size VARCHAR(255),
     Product_Broken_Size_Date Date,
     sale_off_rate decimal(6,2),
+    last_price      decimal(10,2),
     sale_off_rate_date Date,
     Product_restock VARCHAR(255),
     Product_restock_Date Date,
@@ -33,9 +35,10 @@ CREATE TABLE crawler_data_hk (
     id   bigint(32) NOT NULL AUTO_INCREMENT,
     code VARCHAR(30) COMMENT '',
     title      VARCHAR(255),
-    details    VARCHAR(30),
+    details    VARCHAR(255),
     price      decimal(10,2),
     sizes      VARCHAR(255),
+    brands     VARCHAR(30),
     product_url VARCHAR(255),
     Product_Live VARCHAR(30),
     Product_Live_Date Date,
@@ -44,6 +47,7 @@ CREATE TABLE crawler_data_hk (
     Product_Last_Broken_Size VARCHAR(255),
     Product_Broken_Size_Date Date,
     sale_off_rate decimal(6,2),
+    last_price      decimal(10,2),
     sale_off_rate_date Date,
     Product_restock VARCHAR(255),
     Product_restock_Date Date,
@@ -54,9 +58,10 @@ CREATE TABLE crawler_data_us (
     id   bigint(32) NOT NULL AUTO_INCREMENT,
     code VARCHAR(30) COMMENT '',
     title      VARCHAR(255),
-    details    VARCHAR(30),
+    details    VARCHAR(255),
     price      decimal(10,2),
     sizes      VARCHAR(255),
+    brands     VARCHAR(30),
     product_url VARCHAR(255),
     Product_Live VARCHAR(30),
     Product_Live_Date Date,
@@ -65,8 +70,51 @@ CREATE TABLE crawler_data_us (
     Product_Last_Broken_Size VARCHAR(255),
     Product_Broken_Size_Date Date,
     sale_off_rate decimal(6,2),
+    last_price      decimal(10,2),
     sale_off_rate_date Date,
     Product_restock VARCHAR(255),
     Product_restock_Date Date,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE crawler_daily_data_cn (
+    id   bigint(32) NOT NULL AUTO_INCREMENT,
+    code VARCHAR(30) COMMENT '',
+    title      VARCHAR(255),
+    details    VARCHAR(30),
+    price      decimal(10,2),
+    sizes      VARCHAR(255),
+    broken_Size VARCHAR(255),
+    brands     VARCHAR(30),
+    product_url VARCHAR(255),
+    created_at Date,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE crawler_daily_data_hk (
+    id   bigint(32) NOT NULL AUTO_INCREMENT,
+    code VARCHAR(30) COMMENT '',
+    title      VARCHAR(255),
+    details    VARCHAR(30),
+    price      decimal(10,2),
+    sizes      VARCHAR(255),
+    broken_Size VARCHAR(255),
+    brands     VARCHAR(30),
+    product_url VARCHAR(255),
+    created_at Date,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE crawler_daily_data_us (
+    id   bigint(32) NOT NULL AUTO_INCREMENT,
+    code VARCHAR(30) COMMENT '',
+    title      VARCHAR(255),
+    details    VARCHAR(30),
+    price      decimal(10,2),
+    sizes      VARCHAR(255),
+    broken_Size VARCHAR(255),
+    brands     VARCHAR(30),
+    product_url VARCHAR(255),
+    created_at Date,
     PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

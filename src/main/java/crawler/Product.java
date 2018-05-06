@@ -1,16 +1,13 @@
 package crawler;
 
 import crawler.persistence.ListStringConverter;
-import org.hibernate.annotations.AccessType;
 import org.hibernate.annotations.AttributeAccessor;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Table;
 import pl.droidsonroids.jspoon.annotation.Selector;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @AttributeAccessor("field")
@@ -36,6 +33,10 @@ public class Product {
     /** product details */
     @Selector(value=".productMainLink .lister__item__details")
     public String details;
+    // product brands
+    @Convert(converter = ListStringConverter.class)
+    public List<String> brands ;
+
     /* product price - string like $ 456 */
     @Selector(value=".productMainLink .lister__item__price-full")
     public transient String lister__item__price_full ;
@@ -45,7 +46,7 @@ public class Product {
     public transient String strike_price ;
 
     @Selector(value = "lister__item__inner, a",  attr="href")
-    public transient String detailUrl ;
+    public transient String detailPageUrl;
 
     /* product price */
     public double price ;
@@ -63,6 +64,7 @@ public class Product {
     @Selector(value=".productMainLink", attr = "href")
     @Column(name = "product_url")
     public String productUrl ;
+
     /* --------------- 分析结果 -------------------*/
     /* 架日期，下架日期，是否新品，降价幅度，断码，补码 */
     public String product_Live = "" ; //是上架（true)，还是下架(false)
@@ -100,10 +102,11 @@ public class Product {
                 ", code='" + code + '\'' +
                 ", title='" + title + '\'' +
                 ", details='" + details + '\'' +
+                ", brands=" + brands +
                 ", lister__item__price_full='" + lister__item__price_full + '\'' +
                 ", lister__item__price_down='" + lister__item__price_down + '\'' +
                 ", strike_price='" + strike_price + '\'' +
-                ", detailUrl='" + detailUrl + '\'' +
+                ", detailPageUrl='" + detailPageUrl + '\'' +
                 ", price=" + price +
                 ", sizes=" + sizes +
                 ", noStockSize=" + noStockSize +

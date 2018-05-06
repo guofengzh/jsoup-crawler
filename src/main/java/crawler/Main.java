@@ -1,5 +1,6 @@
 package crawler;
 
+import crawler.persistence.DailyProductDao;
 import crawler.persistence.ProductDao;
 import crawler.persistence.TableNameUtils;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class Main {
                 System.out.println("Usage: java -jar jafile.jar tablename" ) ;
                 System.exit(-1);
             }
-            TableNameUtils.setTableName(args[0]);
+            TableNameUtils.setTableNamePostfix(args[0]);
             new Main().runDb() ;
             logger.info("Starting crawling products - Done") ;
         } catch (Throwable t ) {
@@ -60,8 +62,30 @@ public class Main {
         }
 
         ProductDao.save(products);
+        DailyProductDao.save(makeDailyProductFromProduct(products));
     }
 
+    public static List<DailyProduct> makeDailyProductFromProduct(List<Product> products) {
+        List<DailyProduct> dailyProducts = new ArrayList<>(products.size()) ;
+        Date createdAt = new Date() ;
+        for (Product product : products) {
+            DailyProduct dailyProduct = new DailyProduct() ;
+            dailyProduct.code = product.code ;
+            dailyProduct.title = product.title ;
+            dailyProduct.details = product.details ;
+            dailyProduct.brands = product.brands ;
+            dailyProduct.price = product.price ;
+            dailyProduct.sizes = product.sizes ;
+            dailyProduct.broken_Size = product.product_Broken_Size ;
+            dailyProduct.productUrl = product.productUrl ;
+            dailyProduct.created_at = createdAt ;
+
+            dailyProducts.add(dailyProduct) ;
+        }
+        return dailyProducts ;
+    }
+
+    @Deprecated
     private void run() throws Exception {
         File f = new File("matchesfashion.csv") ;
 

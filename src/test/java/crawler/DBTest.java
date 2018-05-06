@@ -8,7 +8,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -19,7 +18,7 @@ public class DBTest {
     @Ignore
     public void dbLoad() {
         HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
-        TableNameUtils.setTableName("crawler_data_cn");
+        TableNameUtils.setTableNamePostfix("crawler_data_cn");
         List<Product> products = ProductDao.loadAll() ;
         Assert.assertEquals(products.size(), 1);
         HibernateUtils.shutdown();
@@ -29,7 +28,7 @@ public class DBTest {
     @Ignore
     public void dbLoadSave() {
         HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
-        TableNameUtils.setTableName("crawler_data_cn");
+        TableNameUtils.setTableNamePostfix("crawler_data_cn");
         ProductDao.deleteAllProducts();
         List<Product> products = prepareProducts() ;
         ProductDao.save(products); ;
@@ -45,7 +44,7 @@ public class DBTest {
     @Ignore
     public void dbSave() {
         HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
-        TableNameUtils.setTableName("crawler_data_cn");
+        TableNameUtils.setTableNamePostfix("crawler_data_cn");
         List<Product> products = prepareProducts() ;
         ProductDao.save(products);
         HibernateUtils.shutdown();
