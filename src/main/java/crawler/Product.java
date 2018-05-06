@@ -43,6 +43,10 @@ public class Product {
     public transient String lister__item__price_down ;
     @Selector(value=".productMainLink .lister__item__price strike")
     public transient String strike_price ;
+
+    @Selector(value = "lister__item__inner, a",  attr="href")
+    public transient String detailUrl ;
+
     /* product price */
     public double price ;
     /** Runaway */
@@ -99,6 +103,7 @@ public class Product {
                 ", lister__item__price_full='" + lister__item__price_full + '\'' +
                 ", lister__item__price_down='" + lister__item__price_down + '\'' +
                 ", strike_price='" + strike_price + '\'' +
+                ", detailUrl='" + detailUrl + '\'' +
                 ", price=" + price +
                 ", sizes=" + sizes +
                 ", noStockSize=" + noStockSize +
@@ -110,6 +115,7 @@ public class Product {
                 ", product_Last_Broken_Size=" + product_Last_Broken_Size +
                 ", product_Broken_Size_Date=" + product_Broken_Size_Date +
                 ", sale_off_rate=" + sale_off_rate +
+                ", last_price=" + last_price +
                 ", sale_off_rate_date=" + sale_off_rate_date +
                 ", product_restock=" + product_restock +
                 ", product_restock_Date=" + product_restock_Date +

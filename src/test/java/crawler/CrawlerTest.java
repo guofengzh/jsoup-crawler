@@ -2,6 +2,7 @@ package crawler;
 
 import crawler.persistence.ProductDao;
 import crawler.persistence.TableNameUtils;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,8 @@ public class CrawlerTest {
 
     final static Logger logger = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String[] args ) {
+    @Test
+    public void pageTest() {
         // load last crawled products
         System.setProperty("total", "1") ;
         CrawingProducts crawingProducts = new CrawingProducts() ;
@@ -35,5 +37,13 @@ public class CrawlerTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void pageDetailTest() throws IOException {
+        String url = "https://www.matchesfashion.com/intl/products/Marni-Watersnake-effect-sandals-1203532" ;
+        CrawingProducts crawingProducts = new CrawingProducts() ;
+        List<String>brands = crawingProducts.getPageDetail(url) ;
+        System.out.println(brands);
     }
 }

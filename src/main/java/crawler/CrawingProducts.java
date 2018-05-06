@@ -15,7 +15,8 @@ public class CrawingProducts {
     public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=120&sort=" ;
 
     Jspoon jspoon = Jspoon.create();
-    HtmlAdapter<Page> htmlAdapter = jspoon.adapter(Page.class);
+    HtmlAdapter<Page> htmlPageAdapter = jspoon.adapter(Page.class);
+    HtmlAdapter<PageDetail> htmlPageDetailAdapter = jspoon.adapter(PageDetail.class);
 
     final static Logger logger = LoggerFactory.getLogger(CrawingProducts.class);
 
@@ -62,7 +63,7 @@ public class CrawingProducts {
             return new ArrayList<>() ;
         }
         String htmlBodyContent = response.body() ;
-        Page page = htmlAdapter.fromHtml(htmlBodyContent);
+        Page page = htmlPageAdapter.fromHtml(htmlBodyContent);
 
         // post process
         for (Product product : page.products) {
@@ -79,5 +80,21 @@ public class CrawingProducts {
             product.product_Broken_Size = product.noStockSize ;
         }
         return page.products ;
+    }
+
+    public List<String> getPageDetail(String url) throws IOException {
+        Connection.Response response = null;
+        response = Jsoup.connect(url)
+                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                .timeout(60000)
+                .execute();
+        int statusCode = response.statusCode();
+        if ( statusCode != 200 ) {
+            logger.error("Status Code: " + statusCode + " at page " + url); ;
+            return new ArrayList<>() ;
+        }
+        String htmlBodyContent = response.body() ;
+        PageDetail pageDetail = htmlPageDetailAdapter.fromHtml(htmlBodyContent);
+        return  pageDetail.brands ;
     }
 }
