@@ -36,6 +36,7 @@ public class DailyProduct {
     @Convert(converter = ListStringConverter.class)
     public List<String> broken_Size ;
     /** product url */
+    @Column(name = "product_url")
     public String productUrl ;
     public Date created_at ;
 

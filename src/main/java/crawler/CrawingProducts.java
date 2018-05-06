@@ -11,9 +11,9 @@ import java.io.*;
 import java.util.*;
 
 public class CrawingProducts {
-    public static final int TOTAL_PAGE = 250 ;
+    public static final int TOTAL_PAGE = 1000 ;
     public static final String base_url = "https://www.matchesfashion.com" ;
-    public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=120&sort=" ;
+    public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=60&sort=" ;
 
     Jspoon jspoon = Jspoon.create();
     HtmlAdapter<Page> htmlPageAdapter = jspoon.adapter(Page.class);
@@ -36,8 +36,8 @@ public class CrawingProducts {
         List<Product> allProducts = new ArrayList<>() ;
         for (i = 1 ; i <= totalPage ; i++ ) {
             try {
-                long t = System.currentTimeMillis() % 5 ;
-                long w = (5 + t ) * 1000 ;
+                long t = System.currentTimeMillis() % 4 ;
+                long w = (3 + t ) * 1000 ;
                 System.out.println("Crawling page " + i + ", first waiting " + w);
                 Thread.sleep( w ) ; // random stop sometime
                 System.out.println("Starting Crawling page " + i );
@@ -50,12 +50,17 @@ public class CrawingProducts {
                 break ;
             allProducts.addAll(products) ;
 
+            int count = 0 ;
+            System.out.println("Detail page done: " + new Date()) ;
             for (Product product : products) {
                 String pageDetailUrl = base_url + product.detailPageUrl ;
-                long t = System.currentTimeMillis() % 5 ;
-                long w = (5 + t ) * 1000 ;
+                long t = System.currentTimeMillis() % 4 ;
+                long w = (3 + t ) * 1000 ;
                 try {
+                    count++ ;
+                    System.out.println(count + " Crawling detail page, first waiting " + w + " "+ pageDetailUrl);
                     Thread.sleep( w ) ;
+                    System.out.println(count + " Starting Crawling detail page " + pageDetailUrl );
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -63,6 +68,7 @@ public class CrawingProducts {
                 if (!brands.isEmpty())
                 product.brands = brands.subList(1, brands.size()) ;
             }
+            System.out.println("Detail page done: " + new Date()) ;
         }
         logger.info("Total products " + allProducts.size() + " on " + (i-1) + " pages"); ;
         return allProducts;
