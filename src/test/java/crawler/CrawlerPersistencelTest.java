@@ -17,5 +17,6 @@ public class CrawlerPersistencelTest {
         List<Product> products = crawingProducts.crawle(1) ;
         ProductDao.save(products);
         DailyProductDao.save(Main.makeDailyProductFromProduct(products));
+        ProductDao.closeSessionFactory();
     }
 }

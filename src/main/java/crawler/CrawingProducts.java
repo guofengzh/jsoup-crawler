@@ -38,9 +38,9 @@ public class CrawingProducts {
             try {
                 long t = System.currentTimeMillis() % 4 ;
                 long w = (3 + t ) * 1000 ;
-                System.out.println("Crawling page " + i + ", first waiting " + w);
+                logger.info("Crawling page " + i + ", first waiting " + w);
                 Thread.sleep( w ) ; // random stop sometime
-                System.out.println("Starting Crawling page " + i );
+                logger.info("Starting Crawling page " + i );
             } catch (InterruptedException e) {
                 logger.error("Page " + i, e) ;
             }
@@ -51,7 +51,8 @@ public class CrawingProducts {
             allProducts.addAll(products) ;
 
             int count = 0 ;
-            System.out.println("Detail page done: " + new Date()) ;
+            Date begin = new Date() ;
+            System.out.println("Detail page begin: " + begin) ;
             for (Product product : products) {
                 String pageDetailUrl = base_url + product.detailPageUrl ;
                 long t = System.currentTimeMillis() % 4 ;
@@ -68,7 +69,8 @@ public class CrawingProducts {
                 if (!brands.isEmpty())
                 product.brands = brands.subList(1, brands.size()) ;
             }
-            System.out.println("Detail page done: " + new Date()) ;
+            logger.info("Detail page done: " + new Date()) ;
+            logger.info("Detail page done - taken: " + (new Date().getTime() - begin.getTime())/1000) ;
         }
         logger.info("Total products " + allProducts.size() + " on " + (i-1) + " pages"); ;
         return allProducts;
