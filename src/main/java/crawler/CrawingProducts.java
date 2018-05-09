@@ -59,18 +59,18 @@ public class CrawingProducts {
                 long w = (3 + t ) * 1000 ;
                 try {
                     count++ ;
-                    System.out.println(count + " Crawling detail page, first waiting " + w + " "+ pageDetailUrl);
+                    logger.info(count + " Crawling detail page, first waiting " + w + " "+ pageDetailUrl);
                     Thread.sleep( w ) ;
-                    System.out.println(count + " Starting Crawling detail page " + pageDetailUrl );
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.info(count + " Starting Crawling detail page " + pageDetailUrl );
+                    List<String> brands = getPageDetail(pageDetailUrl) ;
+                    if (!brands.isEmpty())
+                      product.brands = brands.subList(1, brands.size()) ;
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
                 }
-                List<String> brands = getPageDetail(pageDetailUrl) ;
-                if (!brands.isEmpty())
-                product.brands = brands.subList(1, brands.size()) ;
             }
             logger.info("Detail page done: " + new Date()) ;
-            logger.info("Detail page done - taken: " + (new Date().getTime() - begin.getTime())/1000) ;
+            logger.info("Detail page done - taken in seconds: " + (new Date().getTime() - begin.getTime())/1000) ;
         }
         logger.info("Total products " + allProducts.size() + " on " + (i-1) + " pages"); ;
         return allProducts;
