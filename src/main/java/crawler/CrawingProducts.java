@@ -11,6 +11,9 @@ import java.io.*;
 import java.util.*;
 
 public class CrawingProducts {
+    public static final int DELAY = 5 ;
+    public static final int MOD = 4 ;
+    public static final int ONE_SECOND = 1000 ;
     public static final int TOTAL_PAGE = 1000 ;
     public static final String base_url = "https://www.matchesfashion.com" ;
     public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=60&sort=" ;
@@ -31,32 +34,40 @@ public class CrawingProducts {
     }
 
     public List<Product> crawle(int totalPage) throws IOException {
-        logger.info("max page: " + totalPage) ;
-        int i ;
-        List<Product> allProducts = new ArrayList<>() ;
-        for (i = 1 ; i <= totalPage ; i++ ) {
+        logger.info("max page: " + totalPage);
+        int i;
+        List<Product> allProducts = new ArrayList<>();
+        for (i = 1; i <= totalPage; i++) {
             try {
-                long t = System.currentTimeMillis() % 4 ;
-                long w = (3 + t ) * 1000 ;
+                long t = System.currentTimeMillis() % MOD;
+                long w = (DELAY + t) * ONE_SECOND;
                 logger.info("Crawling page " + i + ", first waiting " + w);
-                Thread.sleep( w ) ; // random stop sometime
-                logger.info("Starting Crawling page " + i );
-            } catch (InterruptedException e) {
-                logger.error("Page " + i, e) ;
+                Thread.sleep(w); // random stop sometime
+                logger.info("Starting Crawling page " + i);
+
+                List<Product> products = getPage(i);
+                if (products.isEmpty())
+                    break;
+                allProducts.addAll(products);
+
+                crawleDetails(products) ;
+
+            } catch (Throwable e) {
+                logger.error("Page " + i, e);
             }
+        }
+        logger.info("Total products " + allProducts.size() + " on " + (i-1) + " pages"); ;
+        return allProducts;
+    }
 
-            List<Product> products = getPage(i);
-            if ( products.isEmpty())
-                break ;
-            allProducts.addAll(products) ;
-
+    public void crawleDetails(List<Product> products) {
             int count = 0 ;
             Date begin = new Date() ;
             System.out.println("Detail page begin: " + begin) ;
             for (Product product : products) {
                 String pageDetailUrl = base_url + product.detailPageUrl ;
-                long t = System.currentTimeMillis() % 4 ;
-                long w = (3 + t ) * 1000 ;
+                long t = System.currentTimeMillis() % MOD ;
+                long w = (DELAY + t ) * ONE_SECOND ;
                 try {
                     count++ ;
                     logger.info(count + " Crawling detail page, first waiting " + w + " "+ pageDetailUrl);
@@ -65,15 +76,12 @@ public class CrawingProducts {
                     List<String> brands = getPageDetail(pageDetailUrl) ;
                     if (!brands.isEmpty())
                       product.brands = brands.subList(1, brands.size()) ;
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     logger.error(e.getMessage(), e);
                 }
             }
             logger.info("Detail page done: " + new Date()) ;
             logger.info("Detail page done - taken in seconds: " + (new Date().getTime() - begin.getTime())/1000) ;
-        }
-        logger.info("Total products " + allProducts.size() + " on " + (i-1) + " pages"); ;
-        return allProducts;
     }
 
     public List<Product> getPage(int i ) throws IOException {
