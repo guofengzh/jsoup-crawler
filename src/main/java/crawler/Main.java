@@ -53,8 +53,11 @@ public class Main {
         List<Product> lastProducts =ProductDao.loadAll() ;
 
         // crawling
+        CrawingBrands crawingBrands = new CrawingBrands() ;
+        Brands brands = crawingBrands.crawle() ;
         CrawingProducts crawingProducts = new CrawingProducts() ;
-        List<Product> products = crawingProducts.crawle() ;
+        crawingProducts.crawle(brands) ;
+        List<Product> products = crawingProducts.getCrawledProducts() ;
 
         if (!lastProducts.isEmpty()) {
             // analysis
@@ -83,38 +86,5 @@ public class Main {
             dailyProducts.add(dailyProduct) ;
         }
         return dailyProducts ;
-    }
-
-    @Deprecated
-    private void run() throws Exception {
-        File f = new File("matchesfashion.csv") ;
-
-        // load last crawled products
-        File lastFile = new File(path) ;
-        List<Product> lastProducts = null ;
-        if (lastFile.exists()) {
-            logger.info("loading last data");
-            lastProducts = new LoadProducts().load(new File(path));
-        }
-
-        // crawling
-        CrawingProducts crawingProducts = new CrawingProducts() ;
-        List<Product> products = crawingProducts.crawle() ;
-
-        if (lastProducts != null) {
-            // analysis
-            logger.info("analysis data");
-            new Analysis().analyze(products, lastProducts) ;
-
-            // backup
-            logger.info("backup data");
-            Path source = Paths.get(path);
-            Path destination = Paths.get(backupFile);
-            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
-        }
-
-        // persist new products
-        logger.info("store data");
-        new PersistProducts().persist(products, lastFile);
     }
 }

@@ -77,19 +77,4 @@ public class DBTest {
         products.add(product) ;
         return products ;
     }
-
-    @Test
-    @Ignore
-    public void saveInCsv() throws Exception {
-        List<Product> products = prepareProducts() ;
-        new PersistProducts().persist(products, new File("./test.csv"));
-    }
-
-    @Test
-    @Ignore
-    public void loadFromCsv() throws Exception {
-        List<Product> products = new LoadProducts().load(new File("./test.csv")) ;
-        Product product = products.iterator().next() ;
-        Assert.assertEquals(product.details,"detail2" );
-    }
 }

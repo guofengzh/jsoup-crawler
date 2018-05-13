@@ -6,17 +6,25 @@ import org.hibernate.annotations.GenericGenerator;
 import pl.droidsonroids.jspoon.annotation.Selector;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @AttributeAccessor("field")
 public class Product {
-    public static final String[] header =
-            {"product_code", "title", "details", "price", "sizes", "product_Broken_Size", "product_url",
-             "product_Live", "product_Live_Date", "product_Soldout_Date",
-              "product_Last_Broken_Size", "product_Broken_Size_Date",
-             "sale_off_rate", "sale_off_rate_date", "product_restock", "product_restock_Date" } ;
+    public static final String base = "https://www.matchesfashion.com" ;
+    public static final String queryString = "?page=%s&noOfRecordsPerPage=60&sort=" ;
+
+    /**
+     *
+     * @param seg /intl/womens/shop/clothing/activewear or /intl/womens/shop/clothing/activewear?page=2&noOfRecordsPerPage=60&sort=
+     * @return https://www.matchesfashion.com/intl/womens/shop/clothing/activewear
+     */
+    public static String getNextPageUrl(String seg) {
+        if ( seg == null || seg.trim().isEmpty()) return null ;
+        else  return base + seg ;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -35,7 +43,7 @@ public class Product {
     public String details;
     // product brands
     @Convert(converter = ListStringConverter.class)
-    public List<String> brands ;
+    public List<String> brands = new ArrayList<>();
 
     /* product price - string like $ 456 */
     @Selector(value=".productMainLink .lister__item__price-full")

@@ -11,81 +11,86 @@ import java.io.*;
 import java.util.*;
 
 public class CrawingProducts {
+    final static Logger logger = LoggerFactory.getLogger(CrawingProducts.class);
     public static final int DELAY = 5 ;
     public static final int MOD = 4 ;
     public static final int ONE_SECOND = 1000 ;
-    public static final int TOTAL_PAGE = 1000 ;
-    public static final String base_url = "https://www.matchesfashion.com" ;
-    public static final String fmt = "https://www.matchesfashion.com/us/womens/shop?page=%d&noOfRecordsPerPage=60&sort=" ;
 
-    Jspoon jspoon = Jspoon.create();
-    HtmlAdapter<Page> htmlPageAdapter = jspoon.adapter(Page.class);
-    HtmlAdapter<PageDetail> htmlPageDetailAdapter = jspoon.adapter(PageDetail.class);
+    private Jspoon jspoon = Jspoon.create();
+    private HtmlAdapter<ProductPage> htmlPageAdapter = jspoon.adapter(ProductPage.class);
+    private final Map<String, Product> productMap = new HashMap<>() ;
 
-    final static Logger logger = LoggerFactory.getLogger(CrawingProducts.class);
-
-    public List<Product> crawle() throws IOException {
-        String total  = System.getProperty("total") ;
-        int totalPage = TOTAL_PAGE ;
-        if ( total != null ) {
-            totalPage = Integer.parseInt(total) ;
-        }
-        return crawle(totalPage) ;
+    public List<Product> getCrawledProducts() {
+        return new ArrayList<>(productMap.values()) ;
     }
 
-    public List<Product> crawle(int totalPage) throws IOException {
-        logger.info("max page: " + totalPage);
-        int i;
-        List<Product> allProducts = new ArrayList<>();
-        for (i = 1; i <= totalPage; i++) {
+    public void crawle(Brands brands ) {
+        crawle(brands.clothing) ;
+        crawle(brands.bags) ;
+        crawle(brands.shoes) ;
+        crawle(brands.jewellery) ;
+        crawle(brands.fine__jewellery) ;
+        crawle(brands.accessories) ;
+    }
+
+    /**
+     * crawling all brand of a category (clothing shoes etc.)
+     *
+     * @param brands
+     * @return
+     */
+    public void crawle(List<String> brands) {
+        for (String brand: brands) {
+            crawle(brand) ;
+        }
+    }
+
+    /**
+     * crawling one brand
+     *
+     * @param brand
+     * @return
+     */
+    public void crawle(String brand) {
+        String[] split = brand.split("/") ;
+        String lastSegment = split[split.length - 1] ;
+
+        ProductPage productPage = new ProductPage() ;
+        String nextPage = Product.getNextPageUrl(brand) ;
+        do {
             try {
                 long t = System.currentTimeMillis() % MOD;
                 long w = (DELAY + t) * ONE_SECOND;
-                logger.info("Crawling page " + i + ", first waiting " + w);
+                logger.info("waiting " + w + " to crawle " + nextPage);
                 Thread.sleep(w); // random stop sometime
-                logger.info("Starting Crawling page " + i);
+                logger.info("Starting Crawling " +  nextPage);
 
-                List<Product> products = getPage(i);
-                if (products.isEmpty())
-                    break;
-                allProducts.addAll(products);
-
-                crawleDetails(products) ;
-
-            } catch (Throwable e) {
-                logger.error("Page " + i, e);
-            }
-        }
-        logger.info("Total products " + allProducts.size() + " on " + (i-1) + " pages"); ;
-        return allProducts;
-    }
-
-    public void crawleDetails(List<Product> products) {
-            int count = 0 ;
-            Date begin = new Date() ;
-            System.out.println("Detail page begin: " + begin) ;
-            for (Product product : products) {
-                String pageDetailUrl = base_url + product.detailPageUrl ;
-                long t = System.currentTimeMillis() % MOD ;
-                long w = (DELAY + t ) * ONE_SECOND ;
-                try {
-                    count++ ;
-                    logger.info(count + " Crawling detail page, first waiting " + w + " "+ pageDetailUrl);
-                    Thread.sleep( w ) ;
-                    logger.info(count + " Starting Crawling detail page " + pageDetailUrl );
-                    List<String> brands = getPageDetail(pageDetailUrl) ;
-                    if (!brands.isEmpty())
-                      product.brands = brands.subList(1, brands.size()) ;
-                } catch (Throwable e) {
-                    logger.error(e.getMessage(), e);
+                productPage = doCrawle(nextPage);
+                for ( Product product : productPage.products) {
+                    // set brands
+                    // first check if this products has bee crawled by other brands
+                    if ( !productMap.containsKey(product.code)) {
+                        productMap.put(product.code, product) ;
+                    }
+                    productMap.get(product.code).brands.add(lastSegment) ;
                 }
+            } catch (Throwable e) {
+                logger.error("Brand " + brand, e);
             }
-            logger.info("Detail page done: " + new Date()) ;
-            logger.info("Detail page done - taken in seconds: " + (new Date().getTime() - begin.getTime())/1000) ;
+            if (productPage.nextPage.equalsIgnoreCase("NO_VALUE"))
+                break ;
+            nextPage = Product.getNextPageUrl(productPage.nextPage) ;
+        } while (nextPage != null) ;
     }
 
-    public List<Product> getPage(int i ) throws IOException {
-        String url = String.format(fmt, i) ;
+    /**
+     * crawling one page
+     *
+     * @param url
+     * @return
+     * @throws IOException
+     */
+    public ProductPage doCrawle(String url) throws IOException {
         Connection.Response response = null;
         response = Jsoup.connect(url)
                 .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
@@ -93,11 +98,11 @@ public class CrawingProducts {
                 .execute();
         int statusCode = response.statusCode();
         if ( statusCode != 200 ) {
-            logger.error("Status Code: " + statusCode + " at page " + i); ;
-            return new ArrayList<>() ;
+            logger.error("Status Code: " + statusCode + " at page " + url); ;
+            return new ProductPage() ;
         }
         String htmlBodyContent = response.body() ;
-        Page page = htmlPageAdapter.fromHtml(htmlBodyContent);
+        ProductPage page = htmlPageAdapter.fromHtml(htmlBodyContent);
 
         // post process
         for (Product product : page.products) {
@@ -113,22 +118,6 @@ public class CrawingProducts {
 
             product.product_Broken_Size = product.noStockSize ;
         }
-        return page.products ;
-    }
-
-    public List<String> getPageDetail(String url) throws IOException {
-        Connection.Response response = null;
-        response = Jsoup.connect(url)
-                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                .timeout(60000)
-                .execute();
-        int statusCode = response.statusCode();
-        if ( statusCode != 200 ) {
-            logger.error("Status Code: " + statusCode + " at page " + url); ;
-            return new ArrayList<>() ;
-        }
-        String htmlBodyContent = response.body() ;
-        PageDetail pageDetail = htmlPageDetailAdapter.fromHtml(htmlBodyContent);
-        return  pageDetail.brands ;
+        return page ;
     }
 }
