@@ -57,7 +57,9 @@ public class CrawingProducts {
 
         ProductPage productPage = new ProductPage() ;
         String nextPage = Product.getNextPageUrl(brand) ;
+        int loop = 0 ; // count the error
         do {
+            loop = 0 ; // start a new page
             try {
                 long t = System.currentTimeMillis() % MOD;
                 long w = (DELAY + t) * ONE_SECOND;
@@ -75,12 +77,13 @@ public class CrawingProducts {
                     productMap.get(product.code).brands.add(lastSegment) ;
                 }
             } catch (Throwable e) {
-                logger.error("Brand " + brand, e);
+                loop++ ;  // this page has error occurred, increase it
+                logger.error(loop + ": brand " + brand, e);
             }
             if (productPage.nextPage.equalsIgnoreCase("NO_VALUE"))
                 break ;
             nextPage = Product.getNextPageUrl(productPage.nextPage) ;
-        } while (nextPage != null) ;
+        } while (nextPage != null && loop > 3 ) ;
     }
 
     /**
