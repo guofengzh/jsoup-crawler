@@ -57,6 +57,7 @@ public class CrawingProducts {
 
         ProductPage productPage = new ProductPage() ;
         String nextPage = Product.getNextPageUrl(brand) ;
+        logger.info("Crawling " + brand) ;
         int loop = 0 ; // count the error
         do {
             loop = 0 ; // start a new page
@@ -65,7 +66,7 @@ public class CrawingProducts {
                 long w = (DELAY + t) * ONE_SECOND;
                 logger.info("waiting " + w + " to crawle " + nextPage);
                 Thread.sleep(w); // random stop sometime
-                logger.info("Starting Crawling " +  nextPage);
+                logger.info("Crawling " +  nextPage);
 
                 productPage = doCrawle(nextPage);
                 for ( Product product : productPage.products) {
@@ -86,6 +87,7 @@ public class CrawingProducts {
                 break ;
             nextPage = Product.getNextPageUrl(productPage.nextPage) ;
         } while (nextPage != null && loop < 4 ) ;
+        logger.info("Crawling done " +  nextPage);
     }
 
     /**
