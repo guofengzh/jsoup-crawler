@@ -74,7 +74,9 @@ public class CrawingProducts {
                     if ( !productMap.containsKey(product.code)) {
                         productMap.put(product.code, product) ;
                     }
-                    productMap.get(product.code).brands.add(lastSegment) ;
+                    Product p =  productMap.get(product.code) ;
+                    if ( !p.brands.contains(lastSegment))
+                         productMap.get(product.code).brands.add(lastSegment) ;
                 }
             } catch (Throwable e) {
                 loop++ ;  // this page has error occurred, increase it
