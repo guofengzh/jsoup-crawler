@@ -83,7 +83,7 @@ public class CrawingProducts {
             if (productPage.nextPage.equalsIgnoreCase("NO_VALUE"))
                 break ;
             nextPage = Product.getNextPageUrl(productPage.nextPage) ;
-        } while (nextPage != null && loop > 3 ) ;
+        } while (nextPage != null && loop < 4 ) ;
     }
 
     /**
