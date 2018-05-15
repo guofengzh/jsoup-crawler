@@ -31,7 +31,7 @@ public class ProductCrawlerTest {
         String url = "https://www.matchesfashion.com/intl/womens/shop/clothing/activewear" ;
         CrawingProducts crawingProducts = new CrawingProducts() ;
         try {
-            ProductPage productPage = crawingProducts.doCrawle(url) ;
+            ProductPage productPage = crawingProducts.doCrawle(url, "https://www.matchesfashion.com/intl/womens/shop") ;
             Assert.assertEquals(productPage.nextPage, "/intl/womens/shop/clothing/activewear?page=2&noOfRecordsPerPage=60&sort=");
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,12 +40,12 @@ public class ProductCrawlerTest {
 
     @Test
     public void crowleOneBrandTest() {
-        String brand = "/intl/womens/shop/clothing/suits" ;
+        String brand = "/intl/womens/shop/clothing/jackets" ;
         CrawingProducts crawingProducts = new CrawingProducts() ;
         crawingProducts.crawle(brand) ;
         List<Product> products = crawingProducts.getCrawledProducts() ;
         System.out.println(products) ;
-        Assert.assertEquals(242, products.size());
+        Assert.assertEquals(695, products.size());
     }
 
 }

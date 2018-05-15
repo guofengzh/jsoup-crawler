@@ -14,7 +14,12 @@ import java.util.List;
 @AttributeAccessor("field")
 public class Product {
     public static final String base = "https://www.matchesfashion.com" ;
-    public static final String queryString = "?page=%s&noOfRecordsPerPage=60&sort=" ;
+    //?sort=cat-curation-list&noOfRecordsPerPage=240&q=
+    public static final String queryStringFmt = "?page=%s&noOfRecordsPerPage=240&sort=" ;
+
+    public static String getFirstPage(String seg) {
+        return base + seg + String.format(queryStringFmt, 1) ;
+    }
 
     /**
      *

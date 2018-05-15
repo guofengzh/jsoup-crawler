@@ -56,7 +56,8 @@ public class CrawingProducts {
         String lastSegment = split[split.length - 1] ;
 
         ProductPage productPage = new ProductPage() ;
-        String nextPage = Product.getNextPageUrl(brand) ;
+        String nextPage = Product.getFirstPage(brand) ;
+        String referrer = "https://www.matchesfashion.com/intl/womens/shop" ;
         logger.info("Crawling " + brand) ;
         int loop = 0 ; // count the error
         do {
@@ -66,9 +67,9 @@ public class CrawingProducts {
                 long w = (DELAY + t) * ONE_SECOND;
                 logger.info("waiting " + w + " to crawle " + nextPage);
                 Thread.sleep(w); // random stop sometime
-                logger.info("Crawling " +  nextPage);
+                logger.info("Crawling " +  brand);
 
-                productPage = doCrawle(nextPage);
+                productPage = doCrawle(nextPage, referrer);
                 for ( Product product : productPage.products) {
                     // set brands
                     // first check if this products has bee crawled by other brands
@@ -83,11 +84,14 @@ public class CrawingProducts {
                 loop++ ;  // this page has error occurred, increase it
                 logger.error(loop + ": brand " + brand, e);
             }
-            if (productPage.nextPage.equalsIgnoreCase("NO_VALUE"))
+            if (productPage.nextPage == null ||
+                    productPage.nextPage.trim().isEmpty()||
+                    productPage.nextPage.equalsIgnoreCase("NO_VALUE"))
                 break ;
+            referrer = nextPage ;
             nextPage = Product.getNextPageUrl(productPage.nextPage) ;
         } while (nextPage != null && loop < 4 ) ;
-        logger.info("Crawling done " +  nextPage);
+        logger.info("Crawling done " +  brand);
     }
 
     /**
@@ -97,10 +101,12 @@ public class CrawingProducts {
      * @return
      * @throws IOException
      */
-    public ProductPage doCrawle(String url) throws IOException {
+    public ProductPage doCrawle(String url, String referer) throws IOException {
+        logger.info("referrer:" + referer);
         Connection.Response response = null;
         response = Jsoup.connect(url)
                 .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                .referrer(referer)
                 .timeout(60000)
                 .execute();
         int statusCode = response.statusCode();
