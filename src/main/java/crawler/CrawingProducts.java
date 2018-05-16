@@ -67,7 +67,7 @@ public class CrawingProducts {
                 long w = (DELAY + t) * ONE_SECOND;
                 logger.info("waiting " + w + " to crawle " + nextPage);
                 Thread.sleep(w); // random stop sometime
-                logger.info("Crawling " +  brand);
+                logger.info("Crawling " +  nextPage);
 
                 productPage = doCrawle(nextPage, referrer);
                 for ( Product product : productPage.products) {
