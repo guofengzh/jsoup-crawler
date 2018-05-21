@@ -1,5 +1,7 @@
 package crawler;
 
+import crawler.model.Brands;
+import crawler.service.CrawingBrands;
 import org.junit.Test;
 
 import java.io.IOException;

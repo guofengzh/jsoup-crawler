@@ -1,4 +1,4 @@
-package crawler;
+package crawler.model;
 
 import pl.droidsonroids.jspoon.annotation.Selector;
 
@@ -9,5 +9,5 @@ public class ProductPage {
     public transient String nextPage ;
 
     @Selector(".lister__item")
-    List<Product> products;
+    public List<Product> products;
 }

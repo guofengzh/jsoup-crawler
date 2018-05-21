@@ -1,18 +1,14 @@
 package crawler;
 
-import crawler.persistence.ProductDao;
-import crawler.persistence.TableNameUtils;
+import crawler.model.Product;
+import crawler.model.ProductPage;
+import crawler.service.CrawingProducts;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

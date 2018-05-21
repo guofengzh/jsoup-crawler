@@ -1,59 +1,52 @@
 package crawler;
 
-import crawler.persistence.HibernateUtils;
-import crawler.persistence.ProductDao;
-import crawler.persistence.TableNameUtils;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import crawler.config.AppConfig;
+import crawler.model.Product;
+import crawler.dao.TableNameUtils;
+import crawler.repository.ProductRepository;
+import crawler.service.Crawling;
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {AppConfig.class})
+@TestPropertySource("classpath:application-test.properties")
 public class DBTest {
+    @Autowired
+    ProductRepository productRepository ;
+    @Autowired
+    Crawling crawling;
+
+    @BeforeClass
+    public static void setup() {
+        TableNameUtils.setTableNamePostfix("cn");
+    }
+
     @Test
-    @Ignore
     public void dbLoad() {
-        HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
-        TableNameUtils.setTableNamePostfix("crawler_data_cn");
-        List<Product> products = ProductDao.loadAll() ;
+        Product product = prepareProducts() ;
+        productRepository.save(product) ;
+        productRepository.save(product) ;
+        List<Product> products = productRepository.findAll() ;
         Assert.assertEquals(products.size(), 1);
-        HibernateUtils.shutdown();
     }
 
     @Test
-    @Ignore
-    public void dbLoadSave() {
-        HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
-        TableNameUtils.setTableNamePostfix("crawler_data_cn");
-        ProductDao.deleteAllProducts();
-        List<Product> products = prepareProducts() ;
-        ProductDao.save(products); ;
-        List<Product> saveProducts = ProductDao.loadAll() ;
-        Assert.assertTrue(saveProducts.iterator().next().id != null);
-        ProductDao.save(saveProducts);
-        List<Product> pLast = ProductDao.loadAll() ;
-        Assert.assertEquals(pLast.size(), 1);
-        HibernateUtils.shutdown();
+    public void crawlingTest() throws Exception {
+        crawling.runDb();
     }
 
-    @Test
-    @Ignore
-    public void dbSave() {
-        HibernateUtils.setHibernateConfigFile("hibernate.cfg-test.xml");
-        TableNameUtils.setTableNamePostfix("crawler_data_cn");
-        List<Product> products = prepareProducts() ;
-        ProductDao.save(products);
-        HibernateUtils.shutdown();
-    }
-
-    private List<Product> prepareProducts() {
-        List<Product> products = new ArrayList<>() ;
-
+    private Product prepareProducts() {
         Product product = new Product() ;
+        product.id = 1L ;
         product.code = "1234" ;
 
         product.title = "title1";
@@ -74,7 +67,6 @@ public class DBTest {
         product.sale_off_rate_date  = new Date();
         product.product_restock = Arrays.asList("56");
         product.product_restock_Date = new Date();
-        products.add(product) ;
-        return products ;
+        return product ;
     }
 }
