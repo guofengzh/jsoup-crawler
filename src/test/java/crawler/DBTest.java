@@ -31,10 +31,10 @@ public class DBTest {
     }
 
     @Test
-    public void dbLoad() {
-        Product product = prepareProducts() ;
-        productRepository.save(product) ;
-        productRepository.save(product) ;
+    @Ignore
+    public void repositoryTest() {
+        Product product = prepareProduct() ;
+        productRepository.saveAll(Arrays.asList(product, product)) ;
         List<Product> products = productRepository.findAll() ;
         Assert.assertEquals(products.size(), 1);
     }
@@ -45,7 +45,7 @@ public class DBTest {
         crawling.runDb();
     }
 
-    private Product prepareProducts() {
+    private Product prepareProduct() {
         Product product = new Product() ;
         product.id = 1L ;
         product.code = "1234" ;

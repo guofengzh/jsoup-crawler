@@ -22,13 +22,7 @@ public class ProductDao {
     ProductRepository productRepository ;
 
     public void save(List<Product> products) {
-        for (Product product : products) {
-            if (product.id == null ) {
-                productRepository.save(product);
-            } else {
-                productRepository.save(product);
-            }
-        }
+        productRepository.saveAll(products) ;
     }
 
     public List<Product> loadAll() {

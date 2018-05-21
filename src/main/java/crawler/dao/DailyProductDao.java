@@ -13,8 +13,6 @@ public class DailyProductDao {
     DailyProductRepository dailyProductRepository ;
 
     public void save(List<DailyProduct> products) {
-        for (DailyProduct product : products) {
-            dailyProductRepository.save(product) ;
-        }
+        dailyProductRepository.saveAll(products) ;
     }
 }
