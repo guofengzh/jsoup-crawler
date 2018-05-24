@@ -13,7 +13,7 @@ public class NetBrandTest {
     public void crawlingBrandsTest() throws IOException {
         NetCrawingBrands crawingBrands = new NetCrawingBrands() ;
         NetBrandListPage brands = crawingBrands.crawle() ;
-        System.out.println(brands.clothing) ;
+        System.out.println(brands) ;
     }
 
 }
