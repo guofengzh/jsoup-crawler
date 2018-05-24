@@ -7,9 +7,10 @@ import java.util.List;
 public class NetBrandListPage {
     public static final String url = "https://www.net-a-porter.com" ;
 
-    @Selector(value = ".shop__cols__wrapper__womens .clothing li:not(:first-child) a", attr = "href")
+    @Selector(value = ".sf-nav__bar.sf-nav__section .sf-nav__section.sf-nav__long-list sf-nav__with-all li:not(:first-child) a", attr = "href")
     public List<String> clothing ;
 
+    /*
     @Selector(value = ".shop__cols__wrapper__womens .bags li:not(:first-child) a", attr = "href")
     public List<String> bags ;
 
@@ -36,4 +37,5 @@ public class NetBrandListPage {
                 ", accessories=" + accessories +
                 '}';
     }
+    */
 }

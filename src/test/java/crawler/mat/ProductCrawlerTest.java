@@ -1,8 +1,9 @@
-package crawler;
+package crawler.mat;
 
+import crawler.Main;
 import crawler.model.Product;
 import crawler.page.mat.ProductListPage;
-import crawler.service.CrawingProducts;
+import crawler.service.mat.CrawingProducts;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package crawler.service;
+package crawler.service.mat;
 
 import crawler.Utils;
 import crawler.page.mat.BrandListPage;
