@@ -1,4 +1,4 @@
-package crawler.page;
+package crawler.page.mat;
 
 import crawler.dao.ListStringConverter;
 import org.hibernate.annotations.AttributeAccessor;

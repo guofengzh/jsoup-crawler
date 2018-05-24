@@ -1,6 +1,6 @@
 package crawler.service;
 
-import crawler.page.BrandListPage;
+import crawler.page.mat.BrandListPage;
 import crawler.model.DailyProduct;
 import crawler.model.Product;
 import crawler.dao.DailyProductDao;

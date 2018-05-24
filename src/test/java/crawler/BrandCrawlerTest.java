@@ -1,6 +1,6 @@
 package crawler;
 
-import crawler.page.BrandListPage;
+import crawler.page.mat.BrandListPage;
 import crawler.service.CrawingBrands;
 import org.junit.Test;
 

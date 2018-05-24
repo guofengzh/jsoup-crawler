@@ -1,6 +1,6 @@
 package crawler.service;
 
-import crawler.page.BrandListPage;
+import crawler.page.mat.BrandListPage;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;

@@ -1,10 +1,10 @@
 package crawler.service;
 
 import crawler.Utils;
-import crawler.page.BrandListPage;
+import crawler.page.mat.BrandListPage;
 import crawler.model.Product;
-import crawler.page.ProductListPage;
-import crawler.page.ProductSelector;
+import crawler.page.mat.ProductListPage;
+import crawler.page.mat.ProductSelector;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;

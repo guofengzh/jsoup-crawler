@@ -1,6 +1,5 @@
-package crawler.page;
+package crawler.page.mat;
 
-import crawler.model.Product;
 import pl.droidsonroids.jspoon.annotation.Selector;
 
 import java.util.List;

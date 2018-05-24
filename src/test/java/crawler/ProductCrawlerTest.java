@@ -1,7 +1,7 @@
 package crawler;
 
 import crawler.model.Product;
-import crawler.page.ProductListPage;
+import crawler.page.mat.ProductListPage;
 import crawler.service.CrawingProducts;
 import org.junit.Assert;
 import org.junit.Test;

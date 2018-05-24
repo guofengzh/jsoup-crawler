@@ -1,4 +1,4 @@
-package crawler.page;
+package crawler.page.mat;
 
 import pl.droidsonroids.jspoon.annotation.Selector;
 
