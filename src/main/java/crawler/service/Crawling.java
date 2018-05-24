@@ -1,6 +1,6 @@
 package crawler.service;
 
-import crawler.model.Brands;
+import crawler.page.BrandListPage;
 import crawler.model.DailyProduct;
 import crawler.model.Product;
 import crawler.dao.DailyProductDao;
@@ -36,7 +36,7 @@ public class Crawling {
         List<Product> lastProducts = productDao.loadAll() ;
 
         // crawling
-        Brands brands = crawingBrands.crawle() ;
+        BrandListPage brands = crawingBrands.crawle() ;
         crawingProducts.crawle(brands) ;
         List<Product> products = crawingProducts.getCrawledProducts() ;
 

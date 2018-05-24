@@ -13,24 +13,6 @@ import java.util.List;
 @Entity
 @AttributeAccessor("field")
 public class Product {
-    public static final String base = "https://www.matchesfashion.com" ;
-    //?sort=cat-curation-list&noOfRecordsPerPage=240&q=
-    public static final String queryStringFmt = "?page=%s&noOfRecordsPerPage=240&sort=" ;
-
-    public static String getFirstPage(String seg) {
-        return base + seg + String.format(queryStringFmt, 1) ;
-    }
-
-    /**
-     *
-     * @param seg /intl/womens/shop/clothing/activewear or /intl/womens/shop/clothing/activewear?page=2&noOfRecordsPerPage=60&sort=
-     * @return https://www.matchesfashion.com/intl/womens/shop/clothing/activewear
-     */
-    public static String getNextPageUrl(String seg) {
-        if ( seg == null || seg.trim().isEmpty()) return null ;
-        else  return base + seg ;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -38,41 +20,20 @@ public class Product {
     public Long id;
 
     /** product code */
-    @Selector(value=".productMainLink", attr = "href", format = "(\\d+)$")
     public String code ;
     /** product ttile */
-    @Selector(value=".productMainLink .lister__item__title")
     public String title ;
     /** product details */
-    @Selector(value=".productMainLink .lister__item__details")
     public String details;
     // product brands
     @Convert(converter = ListStringConverter.class)
     public List<String> brands = new ArrayList<>();
 
-    /* product price - string like $ 456 */
-    @Selector(value=".productMainLink .lister__item__price-full")
-    public transient String lister__item__price_full ;
-    @Selector(value=".productMainLink .lister__item__price-down")
-    public transient String lister__item__price_down ;
-    @Selector(value=".productMainLink .lister__item__price strike")
-    public transient String strike_price ;
-
-    @Selector(value = "lister__item__inner, a",  attr="href")
-    public transient String detailPageUrl;
-
     /* product price */
     public double price ;
-    /** Runaway */
-    //@Selector(value=".productMainLink .lister__item__slug")
-    //public String lister__item__slug ;
     /** product size */
-    @Selector(value=".sizes li:not(.noStock)")
     @Convert(converter = ListStringConverter.class)
     public List<String> sizes ;
-    /** no stock size  */
-    @Selector(value=".sizes .noStock")
-    public transient List<String> noStockSize ;
     /** product url */
     @Selector(value=".productMainLink", attr = "href")
     @Column(name = "product_url")
@@ -116,13 +77,8 @@ public class Product {
                 ", title='" + title + '\'' +
                 ", details='" + details + '\'' +
                 ", brands=" + brands +
-                ", lister__item__price_full='" + lister__item__price_full + '\'' +
-                ", lister__item__price_down='" + lister__item__price_down + '\'' +
-                ", strike_price='" + strike_price + '\'' +
-                ", detailPageUrl='" + detailPageUrl + '\'' +
                 ", price=" + price +
                 ", sizes=" + sizes +
-                ", noStockSize=" + noStockSize +
                 ", productUrl='" + productUrl + '\'' +
                 ", product_Live='" + product_Live + '\'' +
                 ", product_Live_Date=" + product_Live_Date +

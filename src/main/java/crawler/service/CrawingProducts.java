@@ -1,13 +1,15 @@
 package crawler.service;
 
 import crawler.Utils;
-import crawler.model.Brands;
+import crawler.page.BrandListPage;
 import crawler.model.Product;
-import crawler.model.ProductPage;
+import crawler.page.ProductListPage;
+import crawler.page.ProductSelector;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pl.droidsonroids.jspoon.HtmlAdapter;
 import pl.droidsonroids.jspoon.Jspoon;
@@ -16,6 +18,7 @@ import java.io.*;
 import java.util.*;
 
 @Component
+@Scope("prototype")
 public class CrawingProducts {
     final static Logger logger = LoggerFactory.getLogger(CrawingProducts.class);
     public static final int DELAY = 5 ;
@@ -23,14 +26,14 @@ public class CrawingProducts {
     public static final int ONE_SECOND = 1000 ;
 
     private Jspoon jspoon = Jspoon.create();
-    private HtmlAdapter<ProductPage> htmlPageAdapter = jspoon.adapter(ProductPage.class);
+    private HtmlAdapter<ProductListPage> htmlPageAdapter = jspoon.adapter(ProductListPage.class);
     private final Map<String, Product> productMap = new HashMap<>() ;
 
     public List<Product> getCrawledProducts() {
         return new ArrayList<>(productMap.values()) ;
     }
 
-    public void crawle(Brands brands ) {
+    public void crawle(BrandListPage brands ) {
         crawle(brands.clothing) ;
         crawle(brands.bags) ;
         crawle(brands.shoes) ;
@@ -58,14 +61,11 @@ public class CrawingProducts {
      * @return
      */
     public void crawle(String brand) {
-        String[] split = brand.split("/") ;
-        String lastSegment = split[split.length - 1] ;
-
-        ProductPage productPage = new ProductPage() ;
-        String nextPage = Product.getFirstPage(brand) ;
+        String nextPage = ProductListPage.getFirstPage(brand) ;
         String referrer = "https://www.matchesfashion.com/intl/womens/shop" ;
         logger.info("Crawling " + brand) ;
         int loop = 0 ; // count the error
+        ProductListPage productPage = null ;
         do {
             loop = 0 ; // start a new page
             try {
@@ -76,16 +76,7 @@ public class CrawingProducts {
                 logger.info("Crawling " +  nextPage);
 
                 productPage = doCrawle(nextPage, referrer);
-                for ( Product product : productPage.products) {
-                    // set brands
-                    // first check if this products has bee crawled by other brands
-                    if ( !productMap.containsKey(product.code)) {
-                        productMap.put(product.code, product) ;
-                    }
-                    Product p =  productMap.get(product.code) ;
-                    if ( !p.brands.contains(lastSegment))
-                         productMap.get(product.code).brands.add(lastSegment) ;
-                }
+                proessSelectedProducts(brand, productPage);
             } catch (Throwable e) {
                 loop++ ;  // this page has error occurred, increase it
                 logger.error(loop + ": brand " + brand, e);
@@ -95,7 +86,7 @@ public class CrawingProducts {
                     productPage.nextPage.equalsIgnoreCase("NO_VALUE"))
                 break ;
             referrer = nextPage ;
-            nextPage = Product.getNextPageUrl(productPage.nextPage) ;
+            nextPage = ProductListPage.getNextPageUrl(productPage.nextPage) ;
         } while (nextPage != null && loop < 4 ) ;
         logger.info("Crawling done " +  brand);
     }
@@ -107,7 +98,7 @@ public class CrawingProducts {
      * @return
      * @throws IOException
      */
-    public ProductPage doCrawle(String url, String referer) throws IOException {
+    public ProductListPage doCrawle(String url, String referer) throws IOException {
         logger.info("referrer:" + referer);
         Connection.Response response = null;
         response = Jsoup.connect(url)
@@ -118,25 +109,42 @@ public class CrawingProducts {
         int statusCode = response.statusCode();
         if ( statusCode != 200 ) {
             logger.error("Status Code: " + statusCode + " at page " + url); ;
-            return new ProductPage() ;
+            return new ProductListPage() ;
         }
         String htmlBodyContent = response.body() ;
-        ProductPage page = htmlPageAdapter.fromHtml(htmlBodyContent);
+        ProductListPage page = htmlPageAdapter.fromHtml(htmlBodyContent);
+        return page ;
+    }
 
-        // post process
-        for (Product product : page.products) {
-            product.code = product.code.trim() ;
-            //logger.info(product.title+" lister__item__price:" + product.lister__item__price_full + " " + product.lister__item__price_down) ;
-            if (!product.lister__item__price_down.equalsIgnoreCase("NO_VALUE")) {
-                product.price = Utils.toDouble(product.lister__item__price_down);
-            } else if (!product.lister__item__price_full.equalsIgnoreCase("NO_VALUE")) {
-                product.price = Utils.toDouble(product.lister__item__price_full);
+    private void proessSelectedProducts(String brand, ProductListPage productListPage) {
+        String[] split = brand.split("/") ;
+        String lastSegment = split[split.length - 1] ;
+
+        for ( ProductSelector slectedProduct : productListPage.products) {
+            Product product = new Product() ;
+            product.code = slectedProduct.code.trim() ;
+            product.title = slectedProduct.title ;
+            product.details = slectedProduct.details ;
+            product.sizes = slectedProduct.sizes ;
+            product.productUrl = slectedProduct.productUrl ;
+
+            if (!slectedProduct.lister__item__price_down.equalsIgnoreCase("NO_VALUE")) {
+                product.price = Utils.toDouble(slectedProduct.lister__item__price_down);
+            } else if (!slectedProduct.lister__item__price_full.equalsIgnoreCase("NO_VALUE")) {
+                product.price = Utils.toDouble(slectedProduct.lister__item__price_full);
             } else {
                 logger.info("No price crawled bor " + product.title) ;
             }
 
-            product.product_Broken_Size = product.noStockSize ;
+            product.product_Broken_Size = slectedProduct.noStockSize ;
+            // set brands
+            // first check if this products has bee crawled by other brands
+            if ( !productMap.containsKey(product.code)) {
+                productMap.put(product.code, product) ;
+            }
+            Product p =  productMap.get(product.code) ;
+            if ( !p.brands.contains(lastSegment))
+                productMap.get(product.code).brands.add(lastSegment) ;
         }
-        return page ;
     }
 }

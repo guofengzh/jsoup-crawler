@@ -52,10 +52,8 @@ public class DBTest {
 
         product.title = "title1";
         product.details = "detail2";
-        product.lister__item__price_full  = "$ 1234";
         product.price  = 1234.5;
         product.sizes = Arrays.asList("12", "34", "56");
-        product.noStockSize = Arrays.asList("99", "88");
         product.productUrl = "/bin/product/1234";
         product.product_Live = "Live" ;
         product.product_Live_Date = new Date();

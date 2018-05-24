@@ -1,6 +1,6 @@
 package crawler.service;
 
-import crawler.model.Brands;
+import crawler.page.BrandListPage;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
@@ -15,23 +15,23 @@ import java.io.IOException;
 public class CrawingBrands {
 
     private Jspoon jspoon = Jspoon.create();
-    private HtmlAdapter<Brands> htmlPageAdapter = jspoon.adapter(Brands.class);
+    private HtmlAdapter<BrandListPage> htmlPageAdapter = jspoon.adapter(BrandListPage.class);
 
     final static Logger logger = LoggerFactory.getLogger(CrawingBrands.class);
 
-    public Brands crawle() throws IOException {
+    public BrandListPage crawle() throws IOException {
         Connection.Response response = null;
-        response = Jsoup.connect(Brands.url)
+        response = Jsoup.connect(BrandListPage.url)
                 .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
                 .timeout(60000)
                 .execute();
         int statusCode = response.statusCode();
         if ( statusCode != 200 ) {
             logger.error("CrawingBrands: Status Code: " + statusCode); ;
-            return new Brands() ;
+            return new BrandListPage() ;
         } else {
             String htmlBodyContent = response.body();
-            Brands brands = htmlPageAdapter.fromHtml(htmlBodyContent);
+            BrandListPage brands = htmlPageAdapter.fromHtml(htmlBodyContent);
             return brands;
         }
     }

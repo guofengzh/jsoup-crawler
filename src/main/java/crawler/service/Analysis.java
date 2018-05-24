@@ -59,7 +59,7 @@ public class Analysis {
     private void analyzeProduct(Product product, Product lastProduct) {
         // 最新上下架 - 不在这里分析
         // 断码列表有变化吗？
-        Set<String> noStocks = new TreeSet<>(product.noStockSize) ;
+        Set<String> noStocks = new TreeSet<>(product.product_Broken_Size) ;
         Set<String> lastNoStack = new TreeSet<>(lastProduct.product_Broken_Size) ;
         noStocks.removeAll(lastNoStack) ;
         if (noStocks.isEmpty()) {

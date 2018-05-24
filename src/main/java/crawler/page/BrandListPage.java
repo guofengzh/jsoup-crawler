@@ -1,10 +1,10 @@
-package crawler.model;
+package crawler.page;
 
 import pl.droidsonroids.jspoon.annotation.Selector;
 
 import java.util.List;
 
-public class Brands {
+public class BrandListPage {
     public static final String url = "https://www.matchesfashion.com/intl/womens" ;
 
     @Selector(value = ".shop__cols__wrapper__womens .clothing li:not(:first-child) a", attr = "href")
@@ -27,7 +27,7 @@ public class Brands {
 
     @Override
     public String toString() {
-        return "Brands{" +
+        return "BrandListPage{" +
                 "clothing=" + clothing + "\n"+
                 ", bags=" + bags + "\n"+
                 ", shoes=" + shoes + "\n"+

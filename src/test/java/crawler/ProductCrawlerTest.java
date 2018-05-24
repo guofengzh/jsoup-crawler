@@ -1,7 +1,7 @@
 package crawler;
 
 import crawler.model.Product;
-import crawler.model.ProductPage;
+import crawler.page.ProductListPage;
 import crawler.service.CrawingProducts;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class ProductCrawlerTest {
         String url = "https://www.matchesfashion.com/intl/womens/shop/clothing/activewear" ;
         CrawingProducts crawingProducts = new CrawingProducts() ;
         try {
-            ProductPage productPage = crawingProducts.doCrawle(url, "https://www.matchesfashion.com/intl/womens/shop") ;
+            ProductListPage productPage = crawingProducts.doCrawle(url, "https://www.matchesfashion.com/intl/womens/shop") ;
             Assert.assertEquals(productPage.nextPage, "/intl/womens/shop/clothing/activewear?page=2&noOfRecordsPerPage=60&sort=");
         } catch (IOException e) {
             e.printStackTrace();
