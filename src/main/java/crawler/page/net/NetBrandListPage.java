@@ -8,7 +8,7 @@ public class NetBrandListPage {
     public static final String url = "https://www.net-a-porter.com" ;
 
     //@Selector(value = ".sf-nav__bar.sf-nav__section .sf-nav__section.sf-nav__long-list.sf-nav__with-all li:not(:first-child):not(:last-child) a", attr = "href")
-    @Selector(value = "body > div.sf-wrapper > div > nav > ul > li:nth-child(3) > div > div > div.sf-nav__categories > div.sf-nav__section.sf-nav__long-list.sf-nav__with-all > ul :not(:first-child):not(:last-child) a", attr = "href")
+    @Selector(value = "body > div.sf-wrapper > div > nav > ul > li:nth-child(3) > div > div > div.sf-nav__categories > div.sf-nav__section.sf-nav__long-list.sf-nav__with-all > ul :not(:first-child):not(:last-child) a:not([href*=Lingerie])", attr = "href")
     public List<String> clothing ;
 
     @Selector(value = "body > div.sf-wrapper > div > nav > ul > li:nth-child(4) > div > div > div.sf-nav__categories > div.sf-nav__section.sf-nav__category-list > ul li:not(:first-child) a", attr = "href")
