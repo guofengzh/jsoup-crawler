@@ -102,7 +102,7 @@ public class CrawingProducts {
         logger.info("referrer:" + referer);
         Connection.Response response = null;
         response = Jsoup.connect(url)
-                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.63 Safari/537.36")
                 .referrer(referer)
                 .timeout(60000)
                 .execute();
