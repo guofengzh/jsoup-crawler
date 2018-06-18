@@ -1,11 +1,7 @@
 package crawler.service.net;
 
-import crawler.Utils;
 import crawler.model.Product;
-import crawler.page.mat.BrandListPage;
-import crawler.page.mat.ProductListPage;
-import crawler.page.mat.ProductSelector;
-import crawler.page.net.NetBrandListPage;
+import crawler.page.net.NetBrandPage;
 import crawler.page.net.NetProductListPage;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -38,7 +34,7 @@ public class NetCrawingProducts {
         return new ArrayList<>(productMap.values()) ;
     }
 
-    public void crawle(NetBrandListPage brands ) {
+    public void crawle(NetBrandPage brands ) {
         crawle(brands.clothing) ;
         crawle(brands.shoes) ;
         crawle(brands.bags) ;
@@ -93,7 +89,7 @@ public class NetCrawingProducts {
                     productPage.nextPage.equalsIgnoreCase("NO_VALUE"))
                 break ;
             referrer = nextPage ;
-            nextPage = ProductListPage.getNextPageUrl(productPage.nextPage) ;
+           // nextPage = ProductListPage.getNextPageUrl(productPage.nextPage) ;
         } while (nextPage != null && loop < 4 ) ;
         logger.info("Crawling done " +  brand);
     }
@@ -111,6 +107,7 @@ public class NetCrawingProducts {
         response = Jsoup.connect(url)
                 .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
                 .referrer(referer)
+                .followRedirects(true)
                 .timeout(60000)
                 .execute();
         int statusCode = response.statusCode();
@@ -126,7 +123,7 @@ public class NetCrawingProducts {
     private void proessSelectedProducts(String brand, NetProductListPage productListPage) {
         String[] split = brand.split("/") ;
         String lastSegment = split[split.length - 1] ;
-
+/*
         for ( ProductSelector slectedProduct : productListPage.products) {
             Product product = new Product() ;
             product.code = slectedProduct.code.trim() ;
@@ -153,5 +150,6 @@ public class NetCrawingProducts {
             if ( !p.brands.contains(lastSegment))
                 productMap.get(product.code).brands.add(lastSegment) ;
         }
+        */
     }
 }

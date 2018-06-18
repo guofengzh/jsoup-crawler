@@ -15,10 +15,6 @@ import java.util.Date;
 import java.util.List;
 
 public class ProductCrawlerTest {
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private static String stringDate = dateFormat.format(new Date());
-    private static String path = "matchesfashion.csv" ;
-    private static String backupFile = "matchesfashion-" + stringDate + ".csv" ;
 
     final static Logger logger = LoggerFactory.getLogger(Main.class);
 
@@ -29,6 +25,7 @@ public class ProductCrawlerTest {
         CrawingProducts crawingProducts = new CrawingProducts() ;
         try {
             ProductListPage productPage = crawingProducts.doCrawle(url, "https://www.matchesfashion.com/intl/womens/shop") ;
+            System.out.println(productPage) ;
             Assert.assertEquals(productPage.nextPage, "/intl/womens/shop/clothing/activewear?page=2&noOfRecordsPerPage=60&sort=");
         } catch (IOException e) {
             e.printStackTrace();

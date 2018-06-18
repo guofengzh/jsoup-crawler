@@ -28,4 +28,12 @@ public class ProductListPage {
 
     @Selector(".lister__item")
     public List<ProductSelector> products;
+
+    @Override
+    public String toString() {
+        return "ProductListPage{" +
+                "nextPage='" + nextPage + '\'' +
+                ", products=" + products +
+                '}';
+    }
 }
