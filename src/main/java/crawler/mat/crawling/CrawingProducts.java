@@ -135,7 +135,6 @@ public class CrawingProducts {
             } else {
                 logger.info("No price crawled for " + product.description) ;
             }
-
             product.product_Broken_Size = slectedProduct.noStockSize ;
             // set categories
             // first check if this products has bee crawled by other categories

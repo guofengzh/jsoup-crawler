@@ -11,6 +11,8 @@ import java.util.*;
 @Component
 public class Analysis {
     private final static Locale CUSTOM_DEFAULT_LOCALE = Locale.US;
+    private final static String LIVE = "Live" ;
+    private final static String SOLD_OUT = "Soldout" ;
 
     final static Logger logger = LoggerFactory.getLogger(Main.class);
 
@@ -30,15 +32,24 @@ public class Analysis {
            // 分析产品的上下架问题
             if (!lastProductMap.containsKey(product.code)) {
                 // 新品上架
-                product.product_Live = "Live" ;
+                product.product_Live = LIVE ;
                 product.product_Live_Date = currentDate ;
                 newProductMap.put(product.code, product) ;
             } else {
-                // 已有的商品，保持上架状态
+                // 已有的商品，
                 GenericProduct lastProduct = lastProductMap.get(product.code);
                 product.id = lastProduct.id ;
-                product.product_Live = lastProduct.product_Live;
-                product.product_Live_Date = lastProduct.product_Live_Date;
+                //  1, 下架的商品
+                String live = lastProduct.product_Live ;
+                if (live.equalsIgnoreCase(SOLD_OUT)) {
+                    // 下架的商品又上架了
+                    product.product_Live = LIVE ;
+                    product.product_Live_Date = currentDate ;
+                 } else {
+                    // 本来就是上架的状态 - 保持上架状态
+                    product.product_Live = lastProduct.product_Live;
+                    product.product_Live_Date = lastProduct.product_Live_Date;
+                }
 
                 // 分析其它参数
                 analyzeProduct(product, lastProduct);
@@ -47,9 +58,9 @@ public class Analysis {
         List<GenericProduct> soldOutProducts = new ArrayList<>() ;
         for (GenericProduct lastProduct : lastProducts ) {
             if(!newProductMap.containsKey(lastProduct.code)) {
-                // 这次下架的商品
+                // 这次下架的商品 - last商品被下架的了
                 if ( lastProduct.product_Live == null || !lastProduct.product_Live.equals("Soldout")) {
-                    lastProduct.product_Live = "Soldout" ;
+                    lastProduct.product_Live = SOLD_OUT ;
                     lastProduct.product_Soldout_Date = currentDate ;
                 }
                 soldOutProducts.add(lastProduct) ;
