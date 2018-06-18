@@ -16,7 +16,7 @@ public class NetProdcutSizeTest {
     @Test
     public void crawleProductSize() throws Exception {
         // load last crawled products
-        String url = "https://www.net-a-porter.com/cn/en/product/1081393/marysia/nassau-reversible-striped-bikini-top" ;
+        String url = "https://www.net-a-porter.com/cn/en/product/909845/eres/anne-sophie-bandeau-swimsuit" ;
         NetCrawingProductSizes crawingProductSizes = new NetCrawingProductSizes() ;
         NetProductDetailPage productDetailPage = crawingProductSizes.crawle(url, "https://www.net-a-porter.com") ;
         System.out.println(productDetailPage) ;

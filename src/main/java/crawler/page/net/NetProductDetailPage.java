@@ -11,6 +11,9 @@ public class NetProductDetailPage {
     @Selector(value="#product-form > div.sizing-container > select-dropdown", attr="options")
     public String options ;
 
+    @Selector(value = "div.sold-out-details > div > span")
+    public String soldOut ;  // NO_VALUE, Item Sold Out
+
     public NetProductDetailPage() {
     }
 
@@ -18,13 +21,14 @@ public class NetProductDetailPage {
     public String toString() {
         return "NetProductDetailPage{" +
                 "options='" + options + '\'' +
+                ", soldOut='" + soldOut + '\'' +
                 '}';
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class OptionJson {
         public String id ;
-        public String stockLevel ; // Low_Stock, In_Stock
+        public String stockLevel ; // Low_Stock, In_Stock, Out_of_Stock
         public String displaySize ;
 
         @Override
