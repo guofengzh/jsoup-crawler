@@ -22,7 +22,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScan({"crawler.dao", "crawler.service"})
 @PropertySource("classpath:application.properties")
-@EnableJpaRepositories("crawler.repository")
+@EnableJpaRepositories("crawler.mat.repository")
 public class AppConfig {
 
 	private static final String PROPERTY_NAME_DATABASE_DRIVER = "db.driver";

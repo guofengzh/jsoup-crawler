@@ -1,17 +1,15 @@
 package crawler.mat;
 
 import crawler.Main;
-import crawler.model.Product;
-import crawler.page.mat.ProductListPage;
-import crawler.service.mat.CrawingProducts;
+import crawler.mat.model.Product;
+import crawler.mat.page.ProductListPage;
+import crawler.mat.service.CrawingProducts;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class ProductCrawlerTest {

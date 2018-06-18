@@ -1,10 +1,10 @@
 package crawler.mat;
 
 import crawler.config.AppConfig;
-import crawler.model.Product;
-import crawler.dao.TableNameUtils;
-import crawler.repository.ProductRepository;
-import crawler.service.Crawling;
+import crawler.mat.model.Product;
+import crawler.TableNameUtils;
+import crawler.mat.repository.ProductRepository;
+import crawler.Crawling;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

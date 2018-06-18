@@ -2,14 +2,10 @@ package crawler.net;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import crawler.page.net.NetProductDetailPage;
-import crawler.page.net.NetProductListPage;
-import crawler.service.net.NetCrawingProductSizes;
-import crawler.service.net.NetCrawingProducts;
-import org.junit.Assert;
+import crawler.net.page.NetProductDetailPage;
+import crawler.net.service.NetCrawingProductSizes;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 public class NetProdcutSizeTest {
