@@ -34,7 +34,7 @@ public class NetCrawingProductSizes {
                 .execute();
         int statusCode = response.statusCode();
         if ( statusCode != 200 ) {
-            logger.error("NetCrawingProducts:Status Code: " + statusCode + " at page " + url); ;
+            logger.error("NetCrawingProductSizes:Status Code: " + statusCode + " at page " + url); ;
             return new NetProductDetailPage() ;
         }
         String htmlBodyContent = response.body() ;

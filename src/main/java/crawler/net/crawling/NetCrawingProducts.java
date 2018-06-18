@@ -76,7 +76,7 @@ public class NetCrawingProducts {
     public void crawle(String brand) {
         String nextPage = NetProductListPage.getFirstPage(brand) ;
         String referrer = NetProductListPage.base ;
-        logger.info("Crawling " + brand) ;
+        logger.info("NetCrawingProducts::Crawling " + brand) ;
         int loop = 0 ; // count the error
         NetProductListPage productPage = null ;
         do {
@@ -84,16 +84,15 @@ public class NetCrawingProducts {
             try {
                 long t = System.currentTimeMillis() % MOD;
                 long w = (DELAY + t) * ONE_SECOND;
-                logger.info("waiting " + w + " to crawle " + nextPage);
-                Thread.sleep(w); // random stop sometime
-                logger.info("Crawling " +  nextPage);
+                logger.info("NetCrawingProducts::waiting " + w + " to crawle " + nextPage);
+                //Thread.sleep(w); // random stop sometime
+                logger.info("NetCrawingProducts::Crawling " +  nextPage);
 
                 productPage = doCrawle(nextPage, referrer);
-                crawleProductSizes(productPage) ;
                 proessSelectedProducts(brand, productPage);
             } catch (Throwable e) {
                 loop++ ;  // this page has error occurred, increase it
-                logger.error(loop + ": brand " + brand, e);
+                logger.error("NetCrawingProducts:" + loop + ": brand " + brand, e);
             }
             referrer = nextPage ;
             nextPage = NetProductListPage.getNextPageUrl(productPage.nextPage) ;
@@ -124,6 +123,10 @@ public class NetCrawingProducts {
         }
         String htmlBodyContent = response.body() ;
         NetProductListPage page = htmlPageAdapter.fromHtml(htmlBodyContent);
+
+        // crawling product sizes on the lonked pages
+        crawleProductSizes(page) ;
+
         return page ;
     }
 

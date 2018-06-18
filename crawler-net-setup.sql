@@ -1,11 +1,3 @@
-CREATE DATABASE crawler;
-
-CREATE USER 'crawler'@'localhost' IDENTIFIED BY 'suPer$Usdr';
-CREATE USER 'crawler'@'%' IDENTIFIED BY 'suPer$Usdr';
-
-GRANT ALL PRIVILEGES ON crawler.* TO 'crawler'@'localhost';
-GRANT ALL PRIVILEGES ON crawler.* TO 'crawler'@'%';
-
 use crawler;
 
 CREATE TABLE crawler_data_net_cn (

@@ -81,7 +81,7 @@ public class Analysis {
             product.product_Broken_Size_Date = lastProduct.product_Broken_Size_Date;
         } else {
             // 有变化
-            product.product_Last_Broken_Size = new ArrayList<>(noStocks) ;
+            product.product_Last_Broken_Size = new ArrayList<>(noStocks) ; // 断码的列表
             product.product_Broken_Size_Date = new Date() ;
         }
 
@@ -107,6 +107,7 @@ public class Analysis {
         sizes.removeAll(lastSizes) ;
         product.product_restock = new ArrayList<>(sizes) ;
         if (!product.product_restock.isEmpty()) { // 今天补码了
+            product.product_restock = new ArrayList<>(sizes) ; // 补码的列表
             product.product_restock_Date = new Date() ;
         } else {
             // 如果今天没有补码，则保持上次的时间

@@ -27,7 +27,7 @@ public class NetCrawingBrands {
                 .execute();
         int statusCode = response.statusCode();
         if ( statusCode != 200 ) {
-            logger.error("CrawingBrands: Status Code: " + statusCode); ;
+            logger.error("NetCrawingBrands: Status Code: " + statusCode); ;
             return new NetBrandPage() ;
         } else {
             String htmlBodyContent = response.body();
