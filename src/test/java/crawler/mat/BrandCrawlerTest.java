@@ -1,7 +1,7 @@
 package crawler.mat;
 
 import crawler.mat.page.BrandListPage;
-import crawler.mat.service.CrawingBrands;
+import crawler.mat.crawling.CrawingBrands;
 import org.junit.Test;
 
 import java.io.IOException;

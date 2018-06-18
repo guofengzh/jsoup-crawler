@@ -1,4 +1,4 @@
-package crawler.net.service;
+package crawler.net.crawling;
 
 import crawler.Analysis;
 import crawler.GenericProduct;
@@ -8,8 +8,6 @@ import crawler.net.repository.ProductNetDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service

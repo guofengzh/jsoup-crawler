@@ -3,7 +3,7 @@ package crawler.net;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import crawler.net.page.NetProductDetailPage;
-import crawler.net.service.NetCrawingProductSizes;
+import crawler.net.crawling.NetCrawingProductSizes;
 import org.junit.Test;
 
 import java.util.List;

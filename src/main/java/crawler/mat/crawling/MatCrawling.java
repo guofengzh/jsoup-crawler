@@ -1,4 +1,4 @@
-package crawler.mat.service;
+package crawler.mat.crawling;
 
 import crawler.GenericProduct;
 import crawler.mat.repository.DailyProductDao;

@@ -3,7 +3,7 @@ package crawler.mat;
 import crawler.Main;
 import crawler.mat.model.Product;
 import crawler.mat.page.ProductListPage;
-import crawler.mat.service.CrawingProducts;
+import crawler.mat.crawling.CrawingProducts;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;

@@ -1,8 +1,10 @@
-package crawler.net.service;
+package crawler.mat.crawling;
 
-import crawler.net.model.ProductNet;
-import crawler.net.page.NetBrandPage;
-import crawler.net.page.NetProductListPage;
+import crawler.Utils;
+import crawler.mat.page.BrandListPage;
+import crawler.mat.model.Product;
+import crawler.mat.page.ProductListPage;
+import crawler.mat.page.ProductSelector;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
@@ -12,36 +14,32 @@ import org.springframework.stereotype.Component;
 import pl.droidsonroids.jspoon.HtmlAdapter;
 import pl.droidsonroids.jspoon.Jspoon;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 @Component
 @Scope("prototype")
-public class NetCrawingProducts {
-    final static Logger logger = LoggerFactory.getLogger(NetCrawingProducts.class);
+public class CrawingProducts {
+    final static Logger logger = LoggerFactory.getLogger(CrawingProducts.class);
     public static final int DELAY = 5 ;
     public static final int MOD = 4 ;
     public static final int ONE_SECOND = 1000 ;
 
     private Jspoon jspoon = Jspoon.create();
-    private HtmlAdapter<NetProductListPage> htmlPageAdapter = jspoon.adapter(NetProductListPage.class);
-    private final Map<String, ProductNet> productMap = new HashMap<>() ;
+    private HtmlAdapter<ProductListPage> htmlPageAdapter = jspoon.adapter(ProductListPage.class);
+    private final Map<String, Product> productMap = new HashMap<>() ;
 
-    public List<ProductNet> getCrawledProducts() {
+    public List<Product> getCrawledProducts() {
         return new ArrayList<>(productMap.values()) ;
     }
 
-    public void crawle(NetBrandPage brands ) {
+    public void crawle(BrandListPage brands ) {
         crawle(brands.clothing) ;
-        crawle(brands.shoes) ;
         crawle(brands.bags) ;
-        crawle(brands.accessories) ;
+        crawle(brands.shoes) ;
         crawle(brands.jewellery) ;
-        crawle(brands.lingerie) ;
-        crawle(brands.beauty) ;
+        crawle(brands.fine__jewellery) ;
+        crawle(brands.accessories) ;
     }
 
     /**
@@ -63,11 +61,11 @@ public class NetCrawingProducts {
      * @return
      */
     public void crawle(String brand) {
-        String nextPage = NetProductListPage.getFirstPage(brand) ;
-        String referrer = NetProductListPage.base ;
+        String nextPage = ProductListPage.getFirstPage(brand) ;
+        String referrer = "https://www.matchesfashion.com/intl/womens/shop" ;
         logger.info("Crawling " + brand) ;
         int loop = 0 ; // count the error
-        NetProductListPage productPage = null ;
+        ProductListPage productPage = null ;
         do {
             loop = 0 ; // start a new page
             try {
@@ -83,13 +81,12 @@ public class NetCrawingProducts {
                 loop++ ;  // this page has error occurred, increase it
                 logger.error(loop + ": brand " + brand, e);
             }
-            // TODO
             if (productPage.nextPage == null ||
                     productPage.nextPage.trim().isEmpty()||
                     productPage.nextPage.equalsIgnoreCase("NO_VALUE"))
                 break ;
             referrer = nextPage ;
-           // nextPage = ProductListPage.getNextPageUrl(productPage.nextPage) ;
+            nextPage = ProductListPage.getNextPageUrl(productPage.nextPage) ;
         } while (nextPage != null && loop < 4 ) ;
         logger.info("Crawling done " +  brand);
     }
@@ -101,29 +98,28 @@ public class NetCrawingProducts {
      * @return
      * @throws IOException
      */
-    public NetProductListPage doCrawle(String url, String referer) throws IOException {
-        logger.info("NetCrawingProducts:referrer:" + referer);
+    public ProductListPage doCrawle(String url, String referer) throws IOException {
+        logger.info("referrer:" + referer);
         Connection.Response response = null;
         response = Jsoup.connect(url)
-                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.63 Safari/537.36")
                 .referrer(referer)
-                .followRedirects(true)
                 .timeout(60000)
                 .execute();
         int statusCode = response.statusCode();
         if ( statusCode != 200 ) {
-            logger.error("NetCrawingProducts:Status Code: " + statusCode + " at page " + url); ;
-            return new NetProductListPage() ;
+            logger.error("Status Code: " + statusCode + " at page " + url); ;
+            return new ProductListPage() ;
         }
         String htmlBodyContent = response.body() ;
-        NetProductListPage page = htmlPageAdapter.fromHtml(htmlBodyContent);
+        ProductListPage page = htmlPageAdapter.fromHtml(htmlBodyContent);
         return page ;
     }
 
-    private void proessSelectedProducts(String brand, NetProductListPage productListPage) {
+    private void proessSelectedProducts(String brand, ProductListPage productListPage) {
         String[] split = brand.split("/") ;
         String lastSegment = split[split.length - 1] ;
-/*
+
         for ( ProductSelector slectedProduct : productListPage.products) {
             Product product = new Product() ;
             product.code = slectedProduct.code.trim() ;
@@ -150,6 +146,5 @@ public class NetCrawingProducts {
             if ( !p.brands.contains(lastSegment))
                 productMap.get(product.code).brands.add(lastSegment) ;
         }
-        */
     }
 }

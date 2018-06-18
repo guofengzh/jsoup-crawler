@@ -1,7 +1,7 @@
 package crawler.net;
 
 import crawler.net.page.NetBrandPage;
-import crawler.net.service.NetCrawingBrands;
+import crawler.net.crawling.NetCrawingBrands;
 import org.junit.Assert;
 import org.junit.Test;
 

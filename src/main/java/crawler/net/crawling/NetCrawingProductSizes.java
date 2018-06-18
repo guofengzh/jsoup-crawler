@@ -1,4 +1,4 @@
-package crawler.net.service;
+package crawler.net.crawling;
 
 import crawler.net.page.NetProductDetailPage;
 import org.jsoup.Connection;

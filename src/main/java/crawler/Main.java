@@ -1,7 +1,7 @@
 package crawler;
 
 import crawler.config.AppConfig;
-import crawler.mat.service.MatCrawling;
+import crawler.mat.crawling.MatCrawling;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
