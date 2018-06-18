@@ -3,6 +3,7 @@ package crawler;
 import crawler.config.AppConfig;
 import crawler.dao.TableNameUtils;
 import crawler.service.Crawling;
+import crawler.service.mat.MatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -24,11 +25,11 @@ public class Main {
         TableNameUtils.setTableNamePostfix(args[0]);
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
-        Crawling run = ctx.getBean(Crawling.class) ;
+        MatService matService = ctx.getBean(MatService.class) ;
 
         try {
             logger.info("Starting crawling products") ;
-            run.run() ;
+            matService.run() ;
             logger.info("Starting crawling products - Done") ;
         } catch (Throwable t ) {
             logger.error(t.getMessage(), t);

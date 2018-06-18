@@ -32,6 +32,9 @@ public class ZonePhysicalNamingStrategy implements PhysicalNamingStrategy {
             case "dailyproduct":
                 tableName = "crawler_daily_data_" + tableNamePostfix ;
                 break;
+            case "ProductNet":
+                tableName = "crawler_data_net_" + tableNamePostfix ;
+                break;
         }
         //System.out.println("*tableName*:" + tableName);
 

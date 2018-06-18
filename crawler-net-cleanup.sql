@@ -1,0 +1,3 @@
+truncate table crawler_daily_data_net_cn;
+truncate table crawler_daily_data_net_hk;
+truncate table crawler_daily_data_net_us;
