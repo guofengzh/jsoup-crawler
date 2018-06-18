@@ -11,7 +11,7 @@ public class NetProductDetailPage {
     @Selector(value="#product-form > div.sizing-container > select-dropdown", attr="options")
     public String options ;  // NO_VALUE, JSON string
 
-    @Selector(value = "div.sold-out-details > div > span")
+    @Selector(value = "div.sold-out-description > div > span")
     public String soldOut ;  // NO_VALUE, Item Sold Out
 
     public NetProductDetailPage() {

@@ -123,8 +123,8 @@ public class CrawingProducts {
         for ( ProductSelector slectedProduct : productListPage.products) {
             Product product = new Product() ;
             product.code = slectedProduct.code.trim() ;
-            product.title = slectedProduct.title ;
-            product.details = slectedProduct.details ;
+            product.brand = slectedProduct.brand;
+            product.description = slectedProduct.description;
             product.sizes = slectedProduct.sizes ;
             product.productUrl = slectedProduct.productUrl ;
 
@@ -133,18 +133,18 @@ public class CrawingProducts {
             } else if (!slectedProduct.lister__item__price_full.equalsIgnoreCase("NO_VALUE")) {
                 product.price = Utils.toDouble(slectedProduct.lister__item__price_full);
             } else {
-                logger.info("No price crawled bor " + product.title) ;
+                logger.info("No price crawled for " + product.description) ;
             }
 
             product.product_Broken_Size = slectedProduct.noStockSize ;
-            // set brands
-            // first check if this products has bee crawled by other brands
+            // set categories
+            // first check if this products has bee crawled by other categories
             if ( !productMap.containsKey(product.code)) {
                 productMap.put(product.code, product) ;
             }
             Product p =  productMap.get(product.code) ;
-            if ( !p.brands.contains(lastSegment))
-                productMap.get(product.code).brands.add(lastSegment) ;
+            if ( !p.categories.contains(lastSegment))
+                productMap.get(product.code).categories.add(lastSegment) ;
         }
     }
 }

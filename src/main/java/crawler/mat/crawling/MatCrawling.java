@@ -60,9 +60,9 @@ public class MatCrawling {
         for (Product product : products) {
             DailyProduct dailyProduct = new DailyProduct() ;
             dailyProduct.code = product.code ;
-            dailyProduct.title = product.title ;
-            dailyProduct.details = product.details ;
-            dailyProduct.brands = product.brands ;
+            dailyProduct.brand = product.brand ;
+            dailyProduct.description = product.description;
+            dailyProduct.categories = product.categories ;
             dailyProduct.price = product.price ;
             dailyProduct.sizes = product.sizes ;
             dailyProduct.broken_Size = product.product_Broken_Size ;

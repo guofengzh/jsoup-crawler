@@ -22,13 +22,13 @@ public class GenericProduct {
 
     /** product code */
     public String code ;
-    /** product ttile */
-    public String title ;
-    /** product details */
-    public String details;
-    // product brands
+    /** product brand */
+    public String brand ;
+    /** product description */
+    public String description;
+    // product categories
     @Convert(converter = ListStringConverter.class)
-    public List<String> brands = new ArrayList<>();
+    public List<String> categories = new ArrayList<>();
 
     /* product price */
     public double price ;
@@ -75,9 +75,9 @@ public class GenericProduct {
         return "Product{" +
                 "id=" + id +
                 ", code='" + code + '\'' +
-                ", title='" + title + '\'' +
-                ", details='" + details + '\'' +
-                ", brands=" + brands +
+                ", brand ='" + brand + '\'' +
+                ", description='" + description + '\'' +
+                ", categories=" + categories +
                 ", price=" + price +
                 ", sizes=" + sizes +
                 ", productUrl='" + productUrl + '\'' +

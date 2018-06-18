@@ -20,12 +20,12 @@ public class DailyProduct {
     /** product code */
     public String code ;
     /** product ttile */
-    public String title ;
-    /** product details */
-    public String details;
-    // product brands
+    public String brand;
+    /** product description */
+    public String description;
+    // product categories
     @Convert(converter = ListStringConverter.class)
-    public List<String> brands ;
+    public List<String> categories;
     /* product price */
     public double price ;
     /** product size */
@@ -47,9 +47,9 @@ public class DailyProduct {
         return "DailyProduct{" +
                 "id=" + id +
                 ", code='" + code + '\'' +
-                ", title='" + title + '\'' +
-                ", details='" + details + '\'' +
-                ", brands=" + brands +
+                ", brand='" + brand + '\'' +
+                ", description='" + description + '\'' +
+                ", categories=" + categories +
                 ", price=" + price +
                 ", sizes=" + sizes +
                 ", broken_Size=" + broken_Size +

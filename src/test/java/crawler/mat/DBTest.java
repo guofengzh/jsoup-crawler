@@ -1,6 +1,7 @@
 package crawler.mat;
 
 import crawler.config.AppConfig;
+import crawler.mat.crawling.MatCrawling;
 import crawler.mat.model.Product;
 import crawler.TableNameUtils;
 import crawler.mat.repository.ProductRepository;
@@ -23,7 +24,7 @@ public class DBTest {
     @Autowired
     ProductRepository productRepository ;
     @Autowired
-    Crawling crawling;
+    MatCrawling crawling;
 
     @BeforeClass
     public static void setup() {
@@ -50,8 +51,8 @@ public class DBTest {
         product.id = 1L ;
         product.code = "1234" ;
 
-        product.title = "title1";
-        product.details = "detail2";
+        product.brand = "brand1";
+        product.description = "detail2";
         product.price  = 1234.5;
         product.sizes = Arrays.asList("12", "34", "56");
         product.productUrl = "/bin/product/1234";

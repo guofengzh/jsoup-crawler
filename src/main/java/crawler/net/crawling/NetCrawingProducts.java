@@ -1,12 +1,17 @@
 package crawler.net.crawling;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import crawler.Utils;
 import crawler.net.model.ProductNet;
 import crawler.net.page.NetBrandPage;
+import crawler.net.page.NetProductDetailPage;
 import crawler.net.page.NetProductListPage;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pl.droidsonroids.jspoon.HtmlAdapter;
@@ -22,9 +27,15 @@ import java.util.Map;
 @Scope("prototype")
 public class NetCrawingProducts {
     final static Logger logger = LoggerFactory.getLogger(NetCrawingProducts.class);
+
     public static final int DELAY = 5 ;
     public static final int MOD = 4 ;
     public static final int ONE_SECOND = 1000 ;
+
+    private ObjectMapper mapper = new ObjectMapper();
+
+    @Autowired
+    private NetCrawingProductSizes netCrawingProductSizes ;
 
     private Jspoon jspoon = Jspoon.create();
     private HtmlAdapter<NetProductListPage> htmlPageAdapter = jspoon.adapter(NetProductListPage.class);
@@ -78,19 +89,15 @@ public class NetCrawingProducts {
                 logger.info("Crawling " +  nextPage);
 
                 productPage = doCrawle(nextPage, referrer);
+                crawleProductSizes(productPage) ;
                 proessSelectedProducts(brand, productPage);
             } catch (Throwable e) {
                 loop++ ;  // this page has error occurred, increase it
                 logger.error(loop + ": brand " + brand, e);
             }
-            // TODO
-            if (productPage.nextPage == null ||
-                    productPage.nextPage.trim().isEmpty()||
-                    productPage.nextPage.equalsIgnoreCase("NO_VALUE"))
-                break ;
             referrer = nextPage ;
-           // nextPage = ProductListPage.getNextPageUrl(productPage.nextPage) ;
-        } while (nextPage != null && loop < 4 ) ;
+            nextPage = NetProductListPage.getNextPageUrl(productPage.nextPage) ;
+        } while (productPage.hasNextPage()) ;
         logger.info("Crawling done " +  brand);
     }
 
@@ -120,36 +127,45 @@ public class NetCrawingProducts {
         return page ;
     }
 
+    private void crawleProductSizes(NetProductListPage productPage) throws IOException {
+        for (NetProductListPage.ProductDivision productDivision : productPage.products) {
+            String prodcutUrl = NetProductListPage.ProductDivision.getProdcutFullUrl(productDivision.productUrl) ;
+            NetProductDetailPage productDetailPage = netCrawingProductSizes.crawle(prodcutUrl, "https://www.net-a-porter.com");
+            productDivision.sizes = new ArrayList<>();
+            productDivision.noStockSize = new ArrayList<>();
+            if (!productDetailPage.options.equalsIgnoreCase("NO_VALUE")) {
+                List<NetProductDetailPage.OptionJson> options = mapper.readValue(productDetailPage.options, new TypeReference<List<NetProductDetailPage.OptionJson>>() {});
+                for (NetProductDetailPage.OptionJson optionJson : options ) {
+                    if ( optionJson.stockLevel.equalsIgnoreCase("Out_of_Stock")) {
+                        productDivision.noStockSize.add(optionJson.displaySize) ;
+                    } else {
+                        productDivision.sizes.add(optionJson.displaySize) ;
+                    }
+                }
+            }
+        }
+    }
+
     private void proessSelectedProducts(String brand, NetProductListPage productListPage) {
         String[] split = brand.split("/") ;
         String lastSegment = split[split.length - 1] ;
-/*
-        for ( ProductSelector slectedProduct : productListPage.products) {
-            Product product = new Product() ;
+
+        for ( NetProductListPage.ProductDivision slectedProduct : productListPage.products) {
+            ProductNet product = new ProductNet() ;
             product.code = slectedProduct.code.trim() ;
-            product.title = slectedProduct.title ;
-            product.details = slectedProduct.details ;
+            product.description = slectedProduct.details ;
             product.sizes = slectedProduct.sizes ;
             product.productUrl = slectedProduct.productUrl ;
-
-            if (!slectedProduct.lister__item__price_down.equalsIgnoreCase("NO_VALUE")) {
-                product.price = Utils.toDouble(slectedProduct.lister__item__price_down);
-            } else if (!slectedProduct.lister__item__price_full.equalsIgnoreCase("NO_VALUE")) {
-                product.price = Utils.toDouble(slectedProduct.lister__item__price_full);
-            } else {
-                logger.info("No price crawled bor " + product.title) ;
-            }
-
+            product.price = Utils.toDouble(slectedProduct.price);
             product.product_Broken_Size = slectedProduct.noStockSize ;
-            // set brands
-            // first check if this products has bee crawled by other brands
+            // set categories
+            // first check if this products has bee crawled by other categories
             if ( !productMap.containsKey(product.code)) {
                 productMap.put(product.code, product) ;
             }
-            Product p =  productMap.get(product.code) ;
-            if ( !p.brands.contains(lastSegment))
-                productMap.get(product.code).brands.add(lastSegment) ;
+            ProductNet p =  productMap.get(product.code) ;
+            if ( !p.categories.contains(lastSegment))
+                productMap.get(product.code).categories.add(lastSegment) ;
         }
-        */
     }
 }

@@ -29,6 +29,10 @@ public class NetProductListPage {
     @Selector("#product-list .products li")
     public List<ProductDivision> products;
 
+    public boolean hasNextPage() {
+        return currentPage.intValue() != lastPage.intValue() ;
+    }
+
     @Override
     public String toString() {
         return "NetProductListPage{" +
@@ -43,8 +47,8 @@ public class NetProductListPage {
         /** product code */
         @Selector(value=".description a", attr = "href", format = "/product/(\\d+)/")
         public String code ;
-        /** product details */
-        @Selector(value=".description a", attr = "title")
+        /** product description */
+        @Selector(value=".description a", attr = "brand")
         public String details;
 
         @Selector(value=".description a .designer")
@@ -66,11 +70,15 @@ public class NetProductListPage {
         public ProductDivision() {
         }
 
+        public static String getProdcutFullUrl(String seg) {
+            return base + seg ;
+        }
+
         @Override
         public String toString() {
             return "ProductDivision{" +
                     "code='" + code + '\'' +
-                    ", details='" + details + '\'' +
+                    ", description='" + details + '\'' +
                     ", designer='" + designer + '\'' +
                     ", price='" + price + '\'' +
                     ", productUrl='" + productUrl + '\'' +
