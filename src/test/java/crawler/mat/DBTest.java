@@ -42,7 +42,7 @@ public class DBTest {
     @Test
     @Ignore
     public void crawlingTest() throws Exception {
-        crawling.runDb();
+        crawling.run();
     }
 
     private Product prepareProduct() {

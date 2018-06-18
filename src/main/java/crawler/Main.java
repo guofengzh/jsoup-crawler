@@ -28,7 +28,7 @@ public class Main {
 
         try {
             logger.info("Starting crawling products") ;
-            run.runDb() ;
+            run.run() ;
             logger.info("Starting crawling products - Done") ;
         } catch (Throwable t ) {
             logger.error(t.getMessage(), t);

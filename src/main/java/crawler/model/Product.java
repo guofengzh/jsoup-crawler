@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * table prefix:
+ *     matchesfashion: cn, hk, us
+ *     net-a-porter: net_cn, net_hk, net_us
+ */
 @Entity
 @AttributeAccessor("field")
 public class Product {

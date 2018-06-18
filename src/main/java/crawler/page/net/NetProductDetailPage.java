@@ -9,7 +9,7 @@ import java.util.List;
 public class NetProductDetailPage {
     /** size */
     @Selector(value="#product-form > div.sizing-container > select-dropdown", attr="options")
-    public String options ;
+    public String options ;  // NO_VALUE, JSON string
 
     @Selector(value = "div.sold-out-details > div > span")
     public String soldOut ;  // NO_VALUE, Item Sold Out

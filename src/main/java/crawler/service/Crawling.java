@@ -33,7 +33,7 @@ public class Crawling {
      *
      * @throws Exception
      */
-    public void runDb() throws Exception {
+    public void run() throws Exception {
         // load last crawled products
         List<Product> lastProducts = productDao.loadAll() ;
 

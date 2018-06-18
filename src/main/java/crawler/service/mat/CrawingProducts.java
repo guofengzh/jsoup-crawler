@@ -1,6 +1,6 @@
 package crawler.service.mat;
 
-import crawler.Utils;
+import crawler.utils.Utils;
 import crawler.page.mat.BrandListPage;
 import crawler.model.Product;
 import crawler.page.mat.ProductListPage;

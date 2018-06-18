@@ -1,4 +1,4 @@
-package crawler;
+package crawler.utils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
