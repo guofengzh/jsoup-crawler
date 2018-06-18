@@ -11,7 +11,7 @@ use crawler;
 CREATE TABLE crawler_data_cn (
     id   bigint(32) NOT NULL AUTO_INCREMENT,
     code VARCHAR(30) COMMENT '',
-    title      VARCHAR(255),
+    brand      VARCHAR(255),
     description    VARCHAR(255),
     price      decimal(10,2),
     sizes      VARCHAR(255),
@@ -34,7 +34,7 @@ CREATE TABLE crawler_data_cn (
 CREATE TABLE crawler_data_hk (
     id   bigint(32) NOT NULL AUTO_INCREMENT,
     code VARCHAR(30) COMMENT '',
-    title      VARCHAR(255),
+    brand      VARCHAR(255),
     description    VARCHAR(255),
     price      decimal(10,2),
     sizes      VARCHAR(255),
@@ -57,7 +57,7 @@ CREATE TABLE crawler_data_hk (
 CREATE TABLE crawler_data_us (
     id   bigint(32) NOT NULL AUTO_INCREMENT,
     code VARCHAR(30) COMMENT '',
-    title      VARCHAR(255),
+    brand      VARCHAR(255),
     description    VARCHAR(255),
     price      decimal(10,2),
     sizes      VARCHAR(255),
@@ -80,7 +80,7 @@ CREATE TABLE crawler_data_us (
 CREATE TABLE crawler_daily_data_cn (
     id   bigint(32) NOT NULL AUTO_INCREMENT,
     code VARCHAR(30) COMMENT '',
-    title      VARCHAR(255),
+    brand      VARCHAR(255),
     description    VARCHAR(255),
     price      decimal(10,2),
     sizes      VARCHAR(255),
@@ -94,7 +94,7 @@ CREATE TABLE crawler_daily_data_cn (
 CREATE TABLE crawler_daily_data_hk (
     id   bigint(32) NOT NULL AUTO_INCREMENT,
     code VARCHAR(30) COMMENT '',
-    title      VARCHAR(255),
+    brand      VARCHAR(255),
     description VARCHAR(255),
     price      decimal(10,2),
     sizes      VARCHAR(255),
@@ -108,7 +108,7 @@ CREATE TABLE crawler_daily_data_hk (
 CREATE TABLE crawler_daily_data_us (
     id   bigint(32) NOT NULL AUTO_INCREMENT,
     code VARCHAR(30) COMMENT '',
-    title      VARCHAR(255),
+    brand      VARCHAR(255),
     description    VARCHAR(255),
     price      decimal(10,2),
     sizes      VARCHAR(255),

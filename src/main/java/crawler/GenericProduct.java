@@ -13,6 +13,7 @@ import java.util.List;
  *     matchesfashion: cn, hk, us
  *     net-a-porter: net_cn, net_hk, net_us
  */
+@MappedSuperclass
 public class GenericProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

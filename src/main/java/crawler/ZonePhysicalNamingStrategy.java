@@ -21,7 +21,7 @@ public class ZonePhysicalNamingStrategy implements PhysicalNamingStrategy {
 
     @Override
     public Identifier toPhysicalTableName(Identifier name, JdbcEnvironment jdbcEnvironment) {
-        //System.out.println("*CanonicalName*:" + name.getCanonicalName());
+        System.out.println("*CanonicalName*:" + name.getCanonicalName());
         String tableNamePostfix = TableNameUtils.getTableNamePostfix() ;
         //System.out.println("*tableNamePostfix*:" + tableNamePostfix) ;
         String tableName = null ;
@@ -32,11 +32,15 @@ public class ZonePhysicalNamingStrategy implements PhysicalNamingStrategy {
             case "dailyproduct":
                 tableName = "crawler_daily_data_" + tableNamePostfix ;
                 break;
-            case "ProductNet":
+            case "productnet":
                 tableName = "crawler_data_net_" + tableNamePostfix ;
                 break;
+            case "genericproduct":
+                tableName = "genericproduct" ;
+                break;
+
         }
-        //System.out.println("*tableName*:" + tableName);
+        System.out.println("*tableName*:" + tableName);
 
         Identifier identifier = Identifier.toIdentifier(tableName) ;
         return identifier;
