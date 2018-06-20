@@ -158,6 +158,7 @@ public class NetCrawingProducts {
             ProductNet product = new ProductNet() ;
             product.code = slectedProduct.code.trim() ;
             product.description = slectedProduct.details ;
+            product.brand = slectedProduct.designer ;
             product.sizes = slectedProduct.sizes ;
             product.productUrl = slectedProduct.productUrl ;
             product.price = Utils.toDouble(slectedProduct.price);
