@@ -12,9 +12,10 @@ public class NetProductListPage {
         return base + seg + String.format(queryStringFmt, 1) ;
     }
 
-    public static String getNextPageUrl(String seg) {
+    public static String getNextPageUrl(String prevUrl, String seg) {
         if ( seg == null || seg.trim().isEmpty()) return null ;
-        else  return base + seg ;
+        int n = prevUrl.lastIndexOf("/") ;
+        return prevUrl.substring(0, n + 1 ) + seg ;
     }
 
     @Selector(value=".page-numbers a.next-page", attr = "href")

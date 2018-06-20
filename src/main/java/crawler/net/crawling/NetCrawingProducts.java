@@ -95,7 +95,7 @@ public class NetCrawingProducts {
                 logger.error("NetCrawingProducts:" + loop + ": brand " + brand, e);
             }
             referrer = nextPage ;
-            nextPage = NetProductListPage.getNextPageUrl(productPage.nextPage) ;
+            nextPage = NetProductListPage.getNextPageUrl(nextPage, productPage.nextPage) ;
         } while (productPage.hasNextPage()) ;
         logger.info("Crawling done " +  brand);
     }
