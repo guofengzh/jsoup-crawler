@@ -150,7 +150,8 @@ public class NetCrawingProducts {
     }
 
     private void proessSelectedProducts(String brand, NetProductListPage productListPage) {
-        String[] split = brand.split("/") ;
+        int n = brand.indexOf("?") ;
+        String[] split = brand.substring(0, n).split("/") ;
         String lastSegment = split[split.length - 1] ;
 
         for ( NetProductListPage.ProductDivision slectedProduct : productListPage.products) {

@@ -46,21 +46,21 @@ public class NetProductListPage {
 
     public static class ProductDivision {
         /** product code */
-        @Selector(value=".description a", attr = "href", format = "/product/(\\d+)/")
+        @Selector(value="div.description > a", attr = "href", format = "/product/(\\d+)/")
         public String code ;
         /** product description */
-        @Selector(value=".description a", attr = "brand")
+        @Selector(value="div.description > a", attr = "title")
         public String details;
 
-        @Selector(value=".description a .designer")
+        @Selector(value="div.description > a > span")
         public String designer ;
 
         /* product price - string like $456 */
-        @Selector(value=".description .price")
+        @Selector(value="div.description > span.price")
         public String price ;
 
         /** product url */
-        @Selector(value=".description > a", attr = "href")
+        @Selector(value="div.description > a", attr = "href")
         public String productUrl ;
 
         /** product size */
