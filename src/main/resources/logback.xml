@@ -54,7 +54,7 @@
     </appender>
 
     <!-- Send logs to both console and file audit -->
-    <logger name="crawler" level="debug"
+    <logger name="crawler" level="INFO"
         additivity="false">
         <appender-ref ref="FILE-AUDIT" />
         <appender-ref ref="STDOUT" />

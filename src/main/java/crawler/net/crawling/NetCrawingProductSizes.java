@@ -24,7 +24,7 @@ public class NetCrawingProductSizes {
     private HtmlAdapter<NetProductDetailPage> htmlPageAdapter = jspoon.adapter(NetProductDetailPage.class);
 
     public NetProductDetailPage crawle(String url, String referer) throws IOException {
-        logger.info("NetCrawingProductSizes:referrer:" + referer);
+        //logger.info("NetCrawingProductSizes:referrer:" + referer);
         Connection.Response response = null;
         response = Jsoup.connect(url)
                 .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")

@@ -2,6 +2,8 @@ package crawler.net.page;
 
 import pl.droidsonroids.jspoon.annotation.Selector;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class NetProductListPage {
@@ -12,10 +14,11 @@ public class NetProductListPage {
         return base + seg + String.format(queryStringFmt, 1) ;
     }
 
-    public static String getNextPageUrl(String prevUrl, String seg) {
+    public static String getNextPageUrl(String prevUrl, String seg) throws Exception {
         if ( seg == null || seg.trim().isEmpty()) return null ;
         int n = prevUrl.lastIndexOf("/") ;
-        return prevUrl.substring(0, n + 1 ) + seg ;
+        String urlStr = prevUrl.substring(0, n + 1 ) + seg ;
+        return new URI(urlStr).normalize().toURL().toExternalForm();
     }
 
     @Selector(value=".page-numbers a.next-page", attr = "href")

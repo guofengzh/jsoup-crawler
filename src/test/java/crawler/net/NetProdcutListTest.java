@@ -13,6 +13,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,18 +28,26 @@ public class NetProdcutListTest {
 
     @Test
     public void crawleOnePage() throws IOException {
-        String url = "https://www.net-a-porter.com/cn/en/d/Shop/Clothing/Beachwear?cm_sp=topnav-_-clothing-_-beachwear&pn=1&npp=60&image_view=product&dScroll=0" ;
+        String url = "https://www.net-a-porter.com/cn/en/d/Shop/Clothing/../Clothing/Beachwear?cm_sp=topnav-_-clothing-_-beachwear&pn=1&npp=60&image_view=product&dScroll=0" ;
         NetProductListPage productPage = netCrawingProducts.doCrawle(url, "https://www.net-a-porter.com") ;
         System.out.println(productPage) ;
         Assert.assertEquals(productPage.currentPage, productPage.lastPage);
     }
 
     @Test
-    public void crowleOneBrandTest() {
+    public void crowleOneBrandTest() throws Exception {
         String brand = "/cn/en/Shop/Clothing/Jackets?pn=1&npp=60&image_view=product&navlevel3=Blazers&cm_sp=topnav-_-clothing-_-blazers" ;
         netCrawingProducts.crawle(brand) ;
         List<ProductNet> products = netCrawingProducts.getCrawledProducts() ;
         System.out.println(products) ;
         Assert.assertEquals(695, products.size());
+    }
+
+    @Test
+    public void urlTest() throws URISyntaxException, MalformedURLException {
+        String urlStr = "https://www.net-a-porter.com/cn/en/d/Shop/Clothing/../Clothing/Beachwear?cm_sp=topnav-_-clothing-_-beachwear&pn=1&npp=60&image_view=product&dScroll=0" ;
+        URL url = new URI(urlStr).normalize().toURL();
+        System.out.println(url.toExternalForm());
+
     }
 }

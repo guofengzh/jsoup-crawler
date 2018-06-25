@@ -63,7 +63,11 @@ public class NetCrawingProducts {
      */
     public void crawle(List<String> brands) {
         for (String brand: brands) {
-            crawle(brand) ;
+            try {
+                crawle(brand) ;
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            }
         }
     }
 
@@ -73,7 +77,7 @@ public class NetCrawingProducts {
      * @param brand
      * @return
      */
-    public void crawle(String brand) {
+    public void crawle(String brand) throws Exception {
         String nextPage = NetProductListPage.getFirstPage(brand) ;
         String referrer = NetProductListPage.base ;
         logger.info("NetCrawingProducts::Crawling " + brand) ;
@@ -82,12 +86,8 @@ public class NetCrawingProducts {
         do {
             loop = 0 ; // start a new page
             try {
-                long t = System.currentTimeMillis() % MOD;
-                long w = (DELAY + t) * ONE_SECOND;
-                logger.info("NetCrawingProducts::waiting " + w + " to crawle " + nextPage);
-                //Thread.sleep(w); // random stop sometime
-                logger.info("NetCrawingProducts::Crawling " +  nextPage);
-
+                delay( nextPage) ;
+                logger.info("NetCrawingProducts::Crawling product " +  nextPage);
                 productPage = doCrawle(nextPage, referrer);
                 proessSelectedProducts(brand, productPage);
             } catch (Throwable e) {
@@ -96,7 +96,9 @@ public class NetCrawingProducts {
             }
             referrer = nextPage ;
             nextPage = NetProductListPage.getNextPageUrl(nextPage, productPage.nextPage) ;
-        } while (productPage.hasNextPage()) ;
+        } while (productPage.hasNextPage() && loop < 4) ;
+        if ( loop == 4 )
+            throw new Exception("Tried 4, but failed") ;
         logger.info("Crawling done " +  brand);
     }
 
@@ -108,8 +110,10 @@ public class NetCrawingProducts {
      * @throws IOException
      */
     public NetProductListPage doCrawle(String url, String referer) throws IOException {
-        logger.info("NetCrawingProducts:referrer:" + referer);
+        //logger.info("NetCrawingProducts:referrer:" + referer);
         Connection.Response response = null;
+        // org.jsoup.HttpStatusException: HTTP error fetching URL
+        // it doesn't want you to scrape their site for data.
         response = Jsoup.connect(url)
                 .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
                 .referrer(referer)
@@ -124,7 +128,7 @@ public class NetCrawingProducts {
         String htmlBodyContent = response.body() ;
         NetProductListPage page = htmlPageAdapter.fromHtml(htmlBodyContent);
 
-        // crawling product sizes on the lonked pages
+        // crawling product sizes on the linked pages
         crawleProductSizes(page) ;
 
         return page ;
@@ -133,6 +137,8 @@ public class NetCrawingProducts {
     private void crawleProductSizes(NetProductListPage productPage) throws IOException {
         for (NetProductListPage.ProductDivision productDivision : productPage.products) {
             String prodcutUrl = NetProductListPage.ProductDivision.getProdcutFullUrl(productDivision.productUrl) ;
+            delay( prodcutUrl) ;
+            logger.info("NetCrawingProducts::Crawling size " +  prodcutUrl);
             NetProductDetailPage productDetailPage = netCrawingProductSizes.crawle(prodcutUrl, "https://www.net-a-porter.com");
             productDivision.sizes = new ArrayList<>();
             productDivision.noStockSize = new ArrayList<>();
@@ -171,6 +177,17 @@ public class NetCrawingProducts {
             ProductNet p =  productMap.get(product.code) ;
             if ( !p.categories.contains(lastSegment))
                 productMap.get(product.code).categories.add(lastSegment) ;
+        }
+    }
+
+    private void delay(String nextPage) {
+        long t = System.currentTimeMillis() % MOD;
+        long w = (DELAY + t) * ONE_SECOND;
+        logger.info("NetCrawingProducts::waiting " + w + " to crawle " + nextPage);
+        try {
+            Thread.sleep(w); // random stop sometime
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
