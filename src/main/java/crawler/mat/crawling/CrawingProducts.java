@@ -50,7 +50,11 @@ public class CrawingProducts {
      */
     public void crawle(List<String> brands) {
         for (String brand: brands) {
-            crawle(brand) ;
+            try {
+                crawle(brand) ;
+            } catch (Exception e) {
+                logger.error(e.getMessage(),e);
+            }
         }
     }
 
@@ -60,34 +64,27 @@ public class CrawingProducts {
      * @param brand
      * @return
      */
-    public void crawle(String brand) {
+    public void crawle(String brand) throws Exception {
         String nextPage = ProductListPage.getFirstPage(brand) ;
         String referrer = "https://www.matchesfashion.com/intl/womens/shop" ;
         logger.info("Crawling " + brand) ;
-        int loop = 0 ; // count the error
         ProductListPage productPage = null ;
         do {
-            loop = 0 ; // start a new page
-            try {
-                long t = System.currentTimeMillis() % MOD;
-                long w = (DELAY + t) * ONE_SECOND;
-                logger.info("waiting " + w + " to crawle " + nextPage);
-                Thread.sleep(w); // random stop sometime
-                logger.info("Crawling " +  nextPage);
+            long t = System.currentTimeMillis() % MOD;
+            long w = (DELAY + t) * ONE_SECOND;
+            logger.info("waiting " + w + " to crawle " + nextPage);
+            Thread.sleep(w); // random stop sometime
+            logger.info("Crawling " +  nextPage);
 
-                productPage = doCrawle(nextPage, referrer);
-                proessSelectedProducts(brand, productPage);
-            } catch (Throwable e) {
-                loop++ ;  // this page has error occurred, increase it
-                logger.error(loop + ": brand " + brand, e);
-            }
+            productPage = doCrawle(nextPage, referrer);
+            proessSelectedProducts(brand, productPage);
             if (productPage.nextPage == null ||
                     productPage.nextPage.trim().isEmpty()||
                     productPage.nextPage.equalsIgnoreCase("NO_VALUE"))
                 break ;
             referrer = nextPage ;
             nextPage = ProductListPage.getNextPageUrl(productPage.nextPage) ;
-        } while (nextPage != null && loop < 4 ) ;
+        } while (nextPage != null ) ;
         logger.info("Crawling done " +  brand);
     }
 

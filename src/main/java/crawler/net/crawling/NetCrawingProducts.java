@@ -81,24 +81,15 @@ public class NetCrawingProducts {
         String nextPage = NetProductListPage.getFirstPage(brand) ;
         String referrer = NetProductListPage.base ;
         logger.info("NetCrawingProducts::Crawling " + brand) ;
-        int loop = 0 ; // count the error
         NetProductListPage productPage = null ;
         do {
-            loop = 0 ; // start a new page
-            try {
-                delay( nextPage) ;
-                logger.info("NetCrawingProducts::Crawling product " +  nextPage);
-                productPage = doCrawle(nextPage, referrer);
-                proessSelectedProducts(brand, productPage);
-            } catch (Throwable e) {
-                loop++ ;  // this page has error occurred, increase it
-                logger.error("NetCrawingProducts:" + loop + ": brand " + brand, e);
-            }
+            delay( nextPage) ;
+            logger.info("NetCrawingProducts::Crawling product " +  nextPage);
+            productPage = doCrawle(nextPage, referrer);
+            proessSelectedProducts(brand, productPage);
             referrer = nextPage ;
             nextPage = NetProductListPage.getNextPageUrl(nextPage, productPage.nextPage) ;
-        } while (productPage.hasNextPage() && loop < 4) ;
-        if ( loop == 4 )
-            throw new Exception("Tried 4, but failed") ;
+        } while (productPage.hasNextPage()) ;
         logger.info("Crawling done " +  brand);
     }
 

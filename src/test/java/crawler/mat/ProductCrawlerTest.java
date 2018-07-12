@@ -31,7 +31,7 @@ public class ProductCrawlerTest {
     }
 
     @Test
-    public void crowleOneBrandTest() {
+    public void crowleOneBrandTest() throws Exception {
         String brand = "/intl/womens/shop/clothing/jackets" ;
         CrawingProducts crawingProducts = new CrawingProducts() ;
         crawingProducts.crawle(brand) ;
