@@ -72,8 +72,12 @@ public class Analysis {
     private void analyzeProduct(GenericProduct product, GenericProduct lastProduct) {
         // 最新上下架 - 不在这里分析
         // 断码列表有变化吗？
-        Set<String> noStocks = new TreeSet<>(product.product_Broken_Size) ;
-        Set<String> lastNoStack = new TreeSet<>(lastProduct.product_Broken_Size) ;
+        Set<String> noStocks = new TreeSet<>() ;
+        Set<String> lastNoStack = new TreeSet<>() ;
+        if ( product.product_Broken_Size != null  )
+            noStocks.addAll(product.product_Broken_Size) ;
+        if ( lastProduct.product_Broken_Size != null )
+            lastNoStack.addAll(lastProduct.product_Broken_Size) ;
         noStocks.removeAll(lastNoStack) ;
         if (noStocks.isEmpty()) {
             // 没有变化
@@ -102,8 +106,12 @@ public class Analysis {
         }
 
         /** 新补码的列表 */
-        Set<String> sizes = new TreeSet<>(product.sizes) ;
-        Set<String> lastSizes = new TreeSet<>(lastProduct.sizes) ;
+        Set<String> sizes = new TreeSet<>() ;
+        Set<String> lastSizes = new TreeSet<>() ;
+        if (product.sizes != null )
+            sizes.addAll(product.sizes) ;
+        if (lastProduct.sizes != null )
+            lastNoStack.addAll(lastProduct.sizes) ;
         sizes.removeAll(lastSizes) ;
         product.product_restock = new ArrayList<>(sizes) ;
         if (!product.product_restock.isEmpty()) { // 今天补码了

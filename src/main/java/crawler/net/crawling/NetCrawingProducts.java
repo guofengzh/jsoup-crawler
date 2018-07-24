@@ -120,7 +120,7 @@ public class NetCrawingProducts {
         NetProductListPage page = htmlPageAdapter.fromHtml(htmlBodyContent);
 
         // crawling product sizes on the linked pages
-        crawleProductSizes(page) ;
+        // crawleProductSizes(page) ;
 
         return page ;
     }
